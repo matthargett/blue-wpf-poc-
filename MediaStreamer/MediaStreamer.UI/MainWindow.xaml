@@ -1,0 +1,436 @@
+﻿<Window x:Class="MediaStreamer.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Interop="clr-namespace:System.Windows.Interop;assembly=PresentationCore" 
+        xmlns:local="clr-namespace:MediaStreamer.UI"
+        mc:Ignorable="d"
+        Title="MediaStreamer.UI - MainWindow"
+        MinWidth="1200"
+        Width="1280"
+        Height="830"
+        MinHeight="420"
+        Loaded="Window_Loaded"
+		Background="LightSteelBlue"
+		Icon="Images/bjn_logo.ico"
+        AutomationProperties.AutomationId="MainWindow" Activated="Window_Activated"
+        Closed="Window_Closed" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <AlternationConverter x:Key="AlternationConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+            <Style TargetType="Button" BasedOn="{StaticResource FlatButtonContactsRight}" x:Key="AnimatedContactsButton">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Width" From="80" To="90" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever" />
+                                    <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" From="Black" To="Transparent" Duration="0:0:5" AutoReverse="True" RepeatBehavior="Forever" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard FillBehavior="Stop">
+                                    <DoubleAnimation Storyboard.TargetProperty="Width" To="80" Duration="0:0:0.3" />
+                                    <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="Black" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Style="{DynamicResource Font-Proxima-Nova}" x:Name="gridTopWrapper">
+        <Grid.Background>
+            <ImageBrush Stretch="UniformToFill" >
+                <ImageBrush.RelativeTransform>
+                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="-1" />
+                </ImageBrush.RelativeTransform>
+                <ImageBrush.ImageSource>
+                    <Interop:D3DImage x:Name="mainStreamImage"/>
+                </ImageBrush.ImageSource>
+            </ImageBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MinHeight="100" Margin="15,15,15,0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Label FontSize="24px" FontWeight="Bold" Style="{DynamicResource Font-Proxima-Nova-Bold}" x:Name="labelTitle">
+                    <Label.Effect>
+                        <DropShadowEffect Color="White" Direction="0" BlurRadius="3" ShadowDepth="3"/>
+                    </Label.Effect> BlueJeans Design Sprint
+                </Label>
+                <Label FontSize="18px" x:Name="labelTime">00:00</Label>
+                <Label FontSize="18px" Foreground="Red" x:Name="mainStreamFpsLabel">FPS</Label>
+                <Label x:Name="camHwEnabled" Style="{DynamicResource HwAcceleratorLabel}"
+                       Visibility="Hidden">
+                    HW
+                </Label>
+            </StackPanel>
+            <!--Top toolbar area-->
+            <Grid Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Style="{DynamicResource FlatButtonCenter}"
+                            local:ButtonExtension.CornerRadius="2,0,0,2">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="{DynamicResource VideoIcon}" Style="{DynamicResource ButtonImageCenter}" />
+                            <Label>VIDEO</Label>
+                        </StackPanel>
+                    </Button>
+
+                    <Grid Background="White" Grid.Column="1">
+                        <Rectangle Height="60" Width="2" Style="{DynamicResource ButtonCenterSpace}" />
+                    </Grid>
+
+                    <Button Grid.Column="2" Style="{DynamicResource FlatButtonCenter}">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="{DynamicResource AudioIcon}" Style="{DynamicResource ButtonImageCenter}" />
+                            <Label>AUDIO</Label>
+                        </StackPanel>
+                    </Button>
+
+                    <Grid Background="White" Grid.Column="3">
+                        <Rectangle Height="60" Width="2" Style="{DynamicResource ButtonCenterSpace}" />
+                    </Grid>
+
+                    <Button Grid.Column="4" Style="{DynamicResource FlatButtonCenter}">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="{DynamicResource ScreenShareIcon}" Style="{DynamicResource ButtonImageCenter}" />
+                            <Label>SHARE</Label>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="5" Style="{DynamicResource FlatButtonCenterRed}"
+                            local:ButtonExtension.CornerRadius="0,2,2,0" Click="Button_Click_1">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="{DynamicResource LeaveCallIcon}" Style="{DynamicResource ButtonImageCenter}" />
+                            <Label>LEAVE</Label>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <ComboBox Grid.Column="2" Margin="10,0,0,0" Style="{DynamicResource FlatComboBox}" Width="84">
+                    <ComboBoxItem IsSelected="True">
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image Source="{DynamicResource ContactsIcon}" Style="{DynamicResource ButtonImageCenter}" />
+                                <Label HorizontalAlignment="Center">...</Label>
+                            </StackPanel>
+                        </Grid>
+                    </ComboBoxItem>
+                </ComboBox>
+
+                <!-- Button Grid.Column="2" Style="{DynamicResource FlatButtonCenter}" Margin="10,0,0,0"
+                        local:ButtonExtension.CornerRadius="4">
+                    
+                </-->
+            </Grid>
+            <!--Right-Top status icons-->
+            <Grid Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" MinWidth="220">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Participants bage -->
+                <Button Grid.Column="0" Width="80" Style="{DynamicResource AnimatedContactsButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3464" Width="24" Height="24">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="AssetsParticipant">
+                                <Canvas Name="Artboard1">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-142.000000" Y="-74.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_AddParticipant_White_24">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="142.000000" Y="74.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Canvas Name="g3475">
+                                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="Path" Fill="#FFFFFFFF" StrokeThickness="1" Data="M18.9083923 7.15832339 C18.9083923 7.28904913 18.9198045 10.1266276 18.9198045 10.1266276 C18.9571535 10.1204026 18.9924276 10.11729 19.0256268 10.11729 C19.4022297 10.11729 19.4675906 10.552005 19.5194642 11.1091456 C19.569263 11.5635732 19.3762929 11.9619754 19.2766954 12.1259013 C19.0598634 12.6716294 18.9146171 13.0555066 18.6676984 13.0555066 C18.6220495 13.0555066 18.5732883 13.0430565 18.5193396 13.0150438 C18.3128824 13.8408985 18.1375493 14.7746537 17.9196799 15.082793 C17.6696487 15.43762 16.9849161 16.0393733 16.4724041 16.4595632 C16.5471022 17.306168 16.3676193 17.4368937 18.1582988 18.196348 C19.9738777 18.9661773 23.2346574 19.7194065 23.6703964 21.0287389 C23.7399071 21.2414276 23.7959307 21.4644914 23.840542 21.6813301 C23.9795635 22.3650464 23.4442271 23 22.7480823 23 L5.26561363 23 C4.56843133 23 4.03309492 22.3650464 4.17211639 21.6813301 C4.21776523 21.4644914 4.27378881 21.2414276 4.34226207 21.0287389 C4.77800101 19.7194065 8.06160514 18.9661773 9.87614657 18.196348 C11.6792758 17.4317062 11.4790434 17.3051305 11.5630787 16.4429631 C11.040192 16.0248483 10.3481971 15.4345074 10.0992034 15.082793 C9.88029647 14.7756912 9.70600089 13.8408985 9.49228132 13.0150438 C9.43937016 13.0430565 9.39164637 13.0555066 9.34599753 13.0555066 C9.10426617 13.0555066 8.95694491 12.6716294 8.73388807 12.1259013 C8.64259039 11.9619754 8.44962029 11.5635732 8.49215671 11.1091456 C8.55129271 10.552005 8.61665355 10.11729 8.98703164 10.11729 C9.01919333 10.11729 9.05446743 10.1204026 9.09181648 10.1266276 C9.09181648 10.1266276 9.10426617 7.28904913 9.10426617 7.15832339 C9.10426617 5.15697463 11.1512017 3 14.0073667 3 C16.8624942 3 18.9083923 5.15697463 18.9083923 7.15832339 Z"/>
+                                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="3" Canvas.Top="0" Width="2" Height="8" RadiusX="2" RadiusY="2" Name="Rectangle1064" Fill="#FFFFFFFF" StrokeThickness="1"/>
+                                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="3" Canvas.Top="0" Width="2" Height="8" RadiusX="2" RadiusY="2" Name="rect3479" Fill="#FFFFFFFF" StrokeThickness="1">
+                                                <Rectangle.RenderTransform>
+                                                    <TransformGroup>
+                                                        <TranslateTransform X="-4.000000" Y="-4.000000"/>
+                                                        <RotateTransform Angle="-90.000000" CenterX="2"/>
+                                                        <TranslateTransform X="4.000000" Y="4.000000"/>
+                                                    </TransformGroup>
+                                                </Rectangle.RenderTransform>
+                                            </Rectangle>
+                                        </Canvas>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                        <Label Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="0,2,0,0" Opacity="1" FontWeight="Normal">6</Label>
+                    </Grid>
+                </Button>
+                <Button Grid.Column="1" Style="{DynamicResource FlatButtonRight}">
+                    <Grid Width="38" Height="36">
+
+                        <!-- Chat regular-->
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3336" Width="32" Height="32" Visibility="Visible">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="AssetsCaht">
+                                <Canvas Name="ArtboardChat1">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-286.000000" Y="-82.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_Chat">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="290.000000" Y="88.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="PathCopy9" StrokeThickness="1.5" Stroke="#FFFFFFFF" Data="M21 18 L21.9950534 18 C23.1029738 18 24 17.1067681 24 16.0049107 L24 1.99508929 C24 0.892622799 23.1023548 0 21.9950534 0 L2.00494659 0 C0.897026226 0 0 0.893231902 0 1.99508929 L0 16.0049107 C0 17.1073772 0.897645164 18 2.00494659 18 L14.7926477 18 L19.4336875 21.6476148 C20.2951037 22.3246429 21 21.9794173 21 20.8701519 L21 18 Z"/>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                        <!-- Chat over -->
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3352" Width="32" Height="32" Visibility="{Binding IsMouseOver, Converter={StaticResource BooleanToVisibilityConverter},Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="AssetsChatHover">
+                                <Canvas Name="ArtboardChatHover1">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-338.000000" Y="-82.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_Chat_Selected">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="342.000000" Y="88.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="PathCopyChatCover9" Fill="#FFFFFFFF" StrokeThickness="1" Data="M21 18 L21.9950534 18 C23.1029738 18 24 17.1067681 24 16.0049107 L24 1.99508929 C24 0.892622799 23.1023548 0 21.9950534 0 L2.00494659 0 C0.897026226 0 0 0.893231902 0 1.99508929 L0 16.0049107 C0 17.1073772 0.897645164 18 2.00494659 18 L14.7926477 18 L19.4336875 21.6476148 C20.2951037 22.3246429 21 21.9794173 21 20.8701519 L21 18 Z"/>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                        <!-- Chat clicked -->
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3355" Width="32" Height="32" Visibility="{Binding IsPressed, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="Assets">
+                                <Canvas Name="ArtboardChatClicked1">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-338.000000" Y="-82.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_Chat_Clicked">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="342.000000" Y="88.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="PathCopyChatClicked9" Fill="#FFAC9393" StrokeThickness="1" Data="M21 18 L21.9950534 18 C23.1029738 18 24 17.1067681 24 16.0049107 L24 1.99508929 C24 0.892622799 23.1023548 0 21.9950534 0 L2.00494659 0 C0.897026226 0 0 0.893231902 0 1.99508929 L0 16.0049107 C0 17.1073772 0.897645164 18 2.00494659 18 L14.7926477 18 L19.4336875 21.6476148 C20.2951037 22.3246429 21 21.9794173 21 20.8701519 L21 18 Z"/>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                    </Grid>
+                </Button>
+                <Button Grid.Column="2" Style="{DynamicResource FlatButtonRight}">
+                    <Grid Width="37" Height="37">
+
+                        <!-- Settings regular-->
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3368"
+                                Width="32" Height="32" Visibility="Visible"
+                                Panel.ZIndex="1">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="AssetsSettings">
+                                <Canvas Name="Navbar">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-286.000000" Y="-250.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_Settings_32">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="289.000000" Y="253.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="ImportedLayers" StrokeThickness="1.5" Stroke="#FFFFFFFF" Data="M6.9565622 1.07109479 C6.27892382 1.33118961 6.43878922 1.8633102 6.72034319 2.85119328 C7.00666926 3.83430397 7.04246002 4.7792356 6.33141694 5.48793433 C6.193026 5.61201626 6.05702112 5.733712 5.92578833 5.86256632 C5.91624413 5.87211108 5.91147203 5.87211108 5.90192783 5.87926966 C5.15032188 6.5569479 4.21021794 6.46388645 3.23909534 6.12743352 C2.26797274 5.78620821 1.74542765 5.59769912 1.44955737 6.25867402 C1.15607315 6.91726274 1.35411535 6.47104502 0.879291275 7.53528621 C0.874519174 7.54483097 0.869747073 7.55198955 0.864974971 7.56630669 C0.387764848 8.62816169 0.585807049 8.18433016 0.294708874 8.83814649 C-0.0011614031 9.50150759 0.485592923 9.76637479 1.38752006 10.2650887 C2.27751694 10.7566441 2.96469952 11.3913709 2.97424372 12.3840263 C2.96231347 12.5701492 2.95515531 12.7586583 2.95515531 12.9447812 C2.95276926 12.9614845 2.94561111 12.9686431 2.94561111 12.9829603 C2.89550405 13.9947052 2.16537256 14.5960254 1.23958492 15.0422431 C0.313797279 15.4860746 -0.192045453 15.7246937 0.0680340648 16.402372 C0.323341481 17.0728916 0.149159786 16.614743 0.566718644 17.7076184 C0.569104695 17.7171632 0.571490745 17.726708 0.576262847 17.7362527 C0.991435654 18.8291282 0.817253959 18.3709795 1.07494743 19.0414992 C1.33264089 19.7215636 1.86711623 19.564075 2.85494119 19.2777321 C3.83799404 18.9937754 4.77809799 18.9579825 5.48914107 19.6642951 C5.61082965 19.8050803 5.73251823 19.9410932 5.86613707 20.0747199 C5.87568127 20.0842647 5.87329522 20.0914232 5.88283942 20.100968 C6.5557057 20.850232 6.46980787 21.7927774 6.12860264 22.7591848 C5.78978345 23.7303645 5.60128545 24.2529404 6.25983542 24.5512142 C6.91838539 24.8423295 6.47219392 24.6442757 7.5363725 25.1239001 C7.5459167 25.1262863 7.54830275 25.1286725 7.55546091 25.1334448 C7.56023301 25.1334448 7.56261906 25.135831 7.56739116 25.135831 C8.63156973 25.6130692 8.18537827 25.410243 8.84154219 25.7061307 C9.50247821 25.9996322 9.76732983 25.5128492 10.2660144 24.6132552 C10.7575408 23.7208198 11.3993885 23.0288244 12.3967576 23.0264382 C12.5757114 23.0359829 12.7594373 23.0431415 12.9407772 23.0431415 C12.9598656 23.0455277 12.9670237 23.0526863 12.9884982 23.0526863 C13.9930255 23.1075687 14.5990823 23.8377431 15.0428877 24.761199 C15.4890792 25.6870411 15.7252982 26.1905274 16.4029366 25.9328188 C17.0734168 25.6751102 16.6200672 25.8493021 17.7104923 25.4341049 C17.7152644 25.4317187 17.7200365 25.4317187 17.7271947 25.4269463 C17.7319668 25.4269463 17.7343528 25.4245601 17.7391249 25.4221739 C18.827164 25.0069767 18.3714284 25.1787825 19.0442946 24.92346 C19.721933 24.6657514 19.5644537 24.1336308 19.2805136 23.1457477 C18.9941876 22.1578647 18.9560108 21.212933 19.676598 20.5018481 C19.8102169 20.3825386 19.9438357 20.263229 20.0702964 20.1367609 C20.0798406 20.1248299 20.0893848 20.1272161 20.1013151 20.1176714 C20.850535 19.4423793 21.7930249 19.5330546 22.7617615 19.8718937 C23.7328841 20.2107328 24.2554292 20.3992419 24.5512995 19.738267 C24.8423976 19.0820645 24.6443554 19.5282822 25.1239516 18.464041 C25.1263377 18.4568824 25.1287237 18.4497238 25.1311098 18.4449515 C25.1334958 18.4401791 25.1334958 18.4354067 25.1358819 18.4330205 C25.613092 17.3687793 25.4102777 17.814997 25.706148 17.1587945 C25.9996322 16.4954334 25.5152639 16.2305662 24.6133368 15.7318523 C23.7161817 15.2379108 23.0242271 14.5984116 23.0242271 13.5962113 C23.0361573 13.417247 23.0409294 13.2406689 23.0409294 13.0617046 C23.0433155 13.042615 23.0528597 13.0330703 23.0528597 13.0115946 C23.1053528 12.004622 23.8354843 11.4033018 24.7612719 10.9594703 C25.6870596 10.5108664 26.1905162 10.2722473 25.9328228 9.59695523 C25.6751293 8.92643556 25.849311 9.38219804 25.4341382 8.28932256 C25.4317521 8.28455018 25.4317521 8.2797778 25.42698 8.27261923 C25.42698 8.26784685 25.424594 8.26307446 25.4222079 8.26068827 C25.0046491 7.17019899 25.1788308 7.62834766 24.9235234 6.95305561 C24.6658299 6.27776355 24.1337406 6.43525216 23.1435296 6.71920889 C22.1580907 7.007938 21.2084425 7.04134467 20.5021716 6.32310118 L20.4997855 6.32310118 C20.380483 6.18947449 20.2611804 6.05584779 20.1347198 5.92937967 C20.1275616 5.9198349 20.1275616 5.91029014 20.1180174 5.90074537 C19.440379 5.1514814 19.531049 4.20893596 19.8722542 3.23775622 C20.2110734 2.26657648 20.3971853 1.74400065 19.7386354 1.44811297 C19.0824714 1.15461148 19.5262769 1.35266533 18.4620983 0.875427129 C18.4525541 0.873040938 18.447782 0.870654747 18.4358517 0.865882365 C18.4358517 0.863496174 18.4358517 0.863496174 18.4334657 0.863496174 C17.366901 0.383871783 17.8130925 0.586698018 17.1569286 0.293196525 C16.4959926 -0.00269115936 16.2287549 0.484091805 15.7324564 1.38368581 C15.2409299 2.27850744 14.5990823 2.97288902 13.5969411 2.97288902 C13.4203733 2.96095806 13.2390335 2.95618568 13.0576936 2.95618568 C13.0386052 2.95379949 13.0338331 2.94664092 13.0123587 2.94425473 C12.0030593 2.89175852 11.3993885 2.16397027 10.955583 1.23812816 C10.5093916 0.309899862 10.2707865 -0.188814057 9.59553418 0.0665083796 C8.91550976 0.326603199 9.39510593 0.142866492 8.25934584 0.577153254 C7.17369281 0.989964297 7.62942847 0.818158545 6.9565622 1.07109479 Z M13 16.6004236 C14.9882251 16.6004236 16.6 14.9885539 16.6 13.0002118 C16.6 11.0118697 14.9882251 9.4 13 9.4 C11.0117749 9.4 9.4 11.0118697 9.4 13.0002118 C9.4 14.9885539 11.0117749 16.6004236 13 16.6004236 Z"/>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                        <!-- Settings over-->
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3384" 
+                                Width="32" Height="32" 
+                            Visibility="{Binding IsMouseOver, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="AssetsSettingsSelcted">
+                                <Canvas Name="NavbarSettingsSelected">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-337.000000" Y="-250.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_Settings_Selected_32">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="340.000000" Y="253.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="ImportedLayersSettingsSelected" Fill="#FFFFFFFF" StrokeThickness="1" Data="M6.9565622 1.07109479 C6.27892382 1.33118961 6.43878922 1.8633102 6.72034319 2.85119328 C7.00666926 3.83430397 7.04246002 4.7792356 6.33141694 5.48793433 C6.193026 5.61201626 6.05702112 5.733712 5.92578833 5.86256632 C5.91624413 5.87211108 5.91147203 5.87211108 5.90192783 5.87926966 C5.15032188 6.5569479 4.21021794 6.46388645 3.23909534 6.12743352 C2.26797274 5.78620821 1.74542765 5.59769912 1.44955737 6.25867402 C1.15607315 6.91726274 1.35411535 6.47104502 0.879291275 7.53528621 C0.874519174 7.54483097 0.869747073 7.55198955 0.864974971 7.56630669 C0.387764848 8.62816169 0.585807049 8.18433016 0.294708874 8.83814649 C-0.0011614031 9.50150759 0.485592923 9.76637479 1.38752006 10.2650887 C2.27751694 10.7566441 2.96469952 11.3913709 2.97424372 12.3840263 C2.96231347 12.5701492 2.95515531 12.7586583 2.95515531 12.9447812 C2.95276926 12.9614845 2.94561111 12.9686431 2.94561111 12.9829603 C2.89550405 13.9947052 2.16537256 14.5960254 1.23958492 15.0422431 C0.313797279 15.4860746 -0.192045453 15.7246937 0.0680340648 16.402372 C0.323341481 17.0728916 0.149159786 16.614743 0.566718644 17.7076184 C0.569104695 17.7171632 0.571490745 17.726708 0.576262847 17.7362527 C0.991435654 18.8291282 0.817253959 18.3709795 1.07494743 19.0414992 C1.33264089 19.7215636 1.86711623 19.564075 2.85494119 19.2777321 C3.83799404 18.9937754 4.77809799 18.9579825 5.48914107 19.6642951 C5.61082965 19.8050803 5.73251823 19.9410932 5.86613707 20.0747199 C5.87568127 20.0842647 5.87329522 20.0914232 5.88283942 20.100968 C6.5557057 20.850232 6.46980787 21.7927774 6.12860264 22.7591848 C5.78978345 23.7303645 5.60128545 24.2529404 6.25983542 24.5512142 C6.91838539 24.8423295 6.47219392 24.6442757 7.5363725 25.1239001 C7.5459167 25.1262863 7.54830275 25.1286725 7.55546091 25.1334448 C7.56023301 25.1334448 7.56261906 25.135831 7.56739116 25.135831 C8.63156973 25.6130692 8.18537827 25.410243 8.84154219 25.7061307 C9.50247821 25.9996322 9.76732983 25.5128492 10.2660144 24.6132552 C10.7575408 23.7208198 11.3993885 23.0288244 12.3967576 23.0264382 C12.5757114 23.0359829 12.7594373 23.0431415 12.9407772 23.0431415 C12.9598656 23.0455277 12.9670237 23.0526863 12.9884982 23.0526863 C13.9930255 23.1075687 14.5990823 23.8377431 15.0428877 24.761199 C15.4890792 25.6870411 15.7252982 26.1905274 16.4029366 25.9328188 C17.0734168 25.6751102 16.6200672 25.8493021 17.7104923 25.4341049 C17.7152644 25.4317187 17.7200365 25.4317187 17.7271947 25.4269463 C17.7319668 25.4269463 17.7343528 25.4245601 17.7391249 25.4221739 C18.827164 25.0069767 18.3714284 25.1787825 19.0442946 24.92346 C19.721933 24.6657514 19.5644537 24.1336308 19.2805136 23.1457477 C18.9941876 22.1578647 18.9560108 21.212933 19.676598 20.5018481 C19.8102169 20.3825386 19.9438357 20.263229 20.0702964 20.1367609 C20.0798406 20.1248299 20.0893848 20.1272161 20.1013151 20.1176714 C20.850535 19.4423793 21.7930249 19.5330546 22.7617615 19.8718937 C23.7328841 20.2107328 24.2554292 20.3992419 24.5512995 19.738267 C24.8423976 19.0820645 24.6443554 19.5282822 25.1239516 18.464041 C25.1263377 18.4568824 25.1287237 18.4497238 25.1311098 18.4449515 C25.1334958 18.4401791 25.1334958 18.4354067 25.1358819 18.4330205 C25.613092 17.3687793 25.4102777 17.814997 25.706148 17.1587945 C25.9996322 16.4954334 25.5152639 16.2305662 24.6133368 15.7318523 C23.7161817 15.2379108 23.0242271 14.5984116 23.0242271 13.5962113 C23.0361573 13.417247 23.0409294 13.2406689 23.0409294 13.0617046 C23.0433155 13.042615 23.0528597 13.0330703 23.0528597 13.0115946 C23.1053528 12.004622 23.8354843 11.4033018 24.7612719 10.9594703 C25.6870596 10.5108664 26.1905162 10.2722473 25.9328228 9.59695523 C25.6751293 8.92643556 25.849311 9.38219804 25.4341382 8.28932256 C25.4317521 8.28455018 25.4317521 8.2797778 25.42698 8.27261923 C25.42698 8.26784685 25.424594 8.26307446 25.4222079 8.26068827 C25.0046491 7.17019899 25.1788308 7.62834766 24.9235234 6.95305561 C24.6658299 6.27776355 24.1337406 6.43525216 23.1435296 6.71920889 C22.1580907 7.007938 21.2084425 7.04134467 20.5021716 6.32310118 L20.4997855 6.32310118 C20.380483 6.18947449 20.2611804 6.05584779 20.1347198 5.92937967 C20.1275616 5.9198349 20.1275616 5.91029014 20.1180174 5.90074537 C19.440379 5.1514814 19.531049 4.20893596 19.8722542 3.23775622 C20.2110734 2.26657648 20.3971853 1.74400065 19.7386354 1.44811297 C19.0824714 1.15461148 19.5262769 1.35266533 18.4620983 0.875427129 C18.4525541 0.873040938 18.447782 0.870654747 18.4358517 0.865882365 C18.4358517 0.863496174 18.4358517 0.863496174 18.4334657 0.863496174 C17.366901 0.383871783 17.8130925 0.586698018 17.1569286 0.293196525 C16.4959926 -0.00269115936 16.2287549 0.484091805 15.7324564 1.38368581 C15.2409299 2.27850744 14.5990823 2.97288902 13.5969411 2.97288902 C13.4203733 2.96095806 13.2390335 2.95618568 13.0576936 2.95618568 C13.0386052 2.95379949 13.0338331 2.94664092 13.0123587 2.94425473 C12.0030593 2.89175852 11.3993885 2.16397027 10.955583 1.23812816 C10.5093916 0.309899862 10.2707865 -0.188814057 9.59553418 0.0665083796 C8.91550976 0.326603199 9.39510593 0.142866492 8.25934584 0.577153254 C7.17369281 0.989964297 7.62942847 0.818158545 6.9565622 1.07109479 Z M13 16.6004236 C14.9882251 16.6004236 16.6 14.9885539 16.6 13.0002118 C16.6 11.0118697 14.9882251 9.4 13 9.4 C11.0117749 9.4 9.4 11.0118697 9.4 13.0002118 C9.4 14.9885539 11.0117749 16.6004236 13 16.6004236 Z"/>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3396" StrokeThickness="1.5" Stroke="#FFFFFFFF" Data="M6.9565622 1.07109479 C6.27892382 1.33118961 6.43878922 1.8633102 6.72034319 2.85119328 C7.00666926 3.83430397 7.04246002 4.7792356 6.33141694 5.48793433 C6.193026 5.61201626 6.05702112 5.733712 5.92578833 5.86256632 C5.91624413 5.87211108 5.91147203 5.87211108 5.90192783 5.87926966 C5.15032188 6.5569479 4.21021794 6.46388645 3.23909534 6.12743352 C2.26797274 5.78620821 1.74542765 5.59769912 1.44955737 6.25867402 C1.15607315 6.91726274 1.35411535 6.47104502 0.879291275 7.53528621 C0.874519174 7.54483097 0.869747073 7.55198955 0.864974971 7.56630669 C0.387764848 8.62816169 0.585807049 8.18433016 0.294708874 8.83814649 C-0.0011614031 9.50150759 0.485592923 9.76637479 1.38752006 10.2650887 C2.27751694 10.7566441 2.96469952 11.3913709 2.97424372 12.3840263 C2.96231347 12.5701492 2.95515531 12.7586583 2.95515531 12.9447812 C2.95276926 12.9614845 2.94561111 12.9686431 2.94561111 12.9829603 C2.89550405 13.9947052 2.16537256 14.5960254 1.23958492 15.0422431 C0.313797279 15.4860746 -0.192045453 15.7246937 0.0680340648 16.402372 C0.323341481 17.0728916 0.149159786 16.614743 0.566718644 17.7076184 C0.569104695 17.7171632 0.571490745 17.726708 0.576262847 17.7362527 C0.991435654 18.8291282 0.817253959 18.3709795 1.07494743 19.0414992 C1.33264089 19.7215636 1.86711623 19.564075 2.85494119 19.2777321 C3.83799404 18.9937754 4.77809799 18.9579825 5.48914107 19.6642951 C5.61082965 19.8050803 5.73251823 19.9410932 5.86613707 20.0747199 C5.87568127 20.0842647 5.87329522 20.0914232 5.88283942 20.100968 C6.5557057 20.850232 6.46980787 21.7927774 6.12860264 22.7591848 C5.78978345 23.7303645 5.60128545 24.2529404 6.25983542 24.5512142 C6.91838539 24.8423295 6.47219392 24.6442757 7.5363725 25.1239001 C7.5459167 25.1262863 7.54830275 25.1286725 7.55546091 25.1334448 C7.56023301 25.1334448 7.56261906 25.135831 7.56739116 25.135831 C8.63156973 25.6130692 8.18537827 25.410243 8.84154219 25.7061307 C9.50247821 25.9996322 9.76732983 25.5128492 10.2660144 24.6132552 C10.7575408 23.7208198 11.3993885 23.0288244 12.3967576 23.0264382 C12.5757114 23.0359829 12.7594373 23.0431415 12.9407772 23.0431415 C12.9598656 23.0455277 12.9670237 23.0526863 12.9884982 23.0526863 C13.9930255 23.1075687 14.5990823 23.8377431 15.0428877 24.761199 C15.4890792 25.6870411 15.7252982 26.1905274 16.4029366 25.9328188 C17.0734168 25.6751102 16.6200672 25.8493021 17.7104923 25.4341049 C17.7152644 25.4317187 17.7200365 25.4317187 17.7271947 25.4269463 C17.7319668 25.4269463 17.7343528 25.4245601 17.7391249 25.4221739 C18.827164 25.0069767 18.3714284 25.1787825 19.0442946 24.92346 C19.721933 24.6657514 19.5644537 24.1336308 19.2805136 23.1457477 C18.9941876 22.1578647 18.9560108 21.212933 19.676598 20.5018481 C19.8102169 20.3825386 19.9438357 20.263229 20.0702964 20.1367609 C20.0798406 20.1248299 20.0893848 20.1272161 20.1013151 20.1176714 C20.850535 19.4423793 21.7930249 19.5330546 22.7617615 19.8718937 C23.7328841 20.2107328 24.2554292 20.3992419 24.5512995 19.738267 C24.8423976 19.0820645 24.6443554 19.5282822 25.1239516 18.464041 C25.1263377 18.4568824 25.1287237 18.4497238 25.1311098 18.4449515 C25.1334958 18.4401791 25.1334958 18.4354067 25.1358819 18.4330205 C25.613092 17.3687793 25.4102777 17.814997 25.706148 17.1587945 C25.9996322 16.4954334 25.5152639 16.2305662 24.6133368 15.7318523 C23.7161817 15.2379108 23.0242271 14.5984116 23.0242271 13.5962113 C23.0361573 13.417247 23.0409294 13.2406689 23.0409294 13.0617046 C23.0433155 13.042615 23.0528597 13.0330703 23.0528597 13.0115946 C23.1053528 12.004622 23.8354843 11.4033018 24.7612719 10.9594703 C25.6870596 10.5108664 26.1905162 10.2722473 25.9328228 9.59695523 C25.6751293 8.92643556 25.849311 9.38219804 25.4341382 8.28932256 C25.4317521 8.28455018 25.4317521 8.2797778 25.42698 8.27261923 C25.42698 8.26784685 25.424594 8.26307446 25.4222079 8.26068827 C25.0046491 7.17019899 25.1788308 7.62834766 24.9235234 6.95305561 C24.6658299 6.27776355 24.1337406 6.43525216 23.1435296 6.71920889 C22.1580907 7.007938 21.2084425 7.04134467 20.5021716 6.32310118 L20.4997855 6.32310118 C20.380483 6.18947449 20.2611804 6.05584779 20.1347198 5.92937967 C20.1275616 5.9198349 20.1275616 5.91029014 20.1180174 5.90074537 C19.440379 5.1514814 19.531049 4.20893596 19.8722542 3.23775622 C20.2110734 2.26657648 20.3971853 1.74400065 19.7386354 1.44811297 C19.0824714 1.15461148 19.5262769 1.35266533 18.4620983 0.875427129 C18.4525541 0.873040938 18.447782 0.870654747 18.4358517 0.865882365 C18.4358517 0.863496174 18.4358517 0.863496174 18.4334657 0.863496174 C17.366901 0.383871783 17.8130925 0.586698018 17.1569286 0.293196525 C16.4959926 -0.00269115936 16.2287549 0.484091805 15.7324564 1.38368581 C15.2409299 2.27850744 14.5990823 2.97288902 13.5969411 2.97288902 C13.4203733 2.96095806 13.2390335 2.95618568 13.0576936 2.95618568 C13.0386052 2.95379949 13.0338331 2.94664092 13.0123587 2.94425473 C12.0030593 2.89175852 11.3993885 2.16397027 10.955583 1.23812816 C10.5093916 0.309899862 10.2707865 -0.188814057 9.59553418 0.0665083796 C8.91550976 0.326603199 9.39510593 0.142866492 8.25934584 0.577153254 C7.17369281 0.989964297 7.62942847 0.818158545 6.9565622 1.07109479 L6.9565622 1.07109479 Z"/>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                        <!-- Settings clicked-->
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg3384SettingsClicked"
+                                Width="32" Height="32" 
+                                Visibility="{Binding IsPressed, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"
+                                Panel.ZIndex="2">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Canvas Name="AssetsSettingsClicked">
+                                <Canvas Name="NavbarSettingsClicked">
+                                    <Canvas.RenderTransform>
+                                        <TranslateTransform X="-337.000000" Y="-250.000000"/>
+                                    </Canvas.RenderTransform>
+                                    <Canvas Name="Icon_Settings_Clicked_32">
+                                        <Canvas.RenderTransform>
+                                            <TranslateTransform X="340.000000" Y="253.000000"/>
+                                        </Canvas.RenderTransform>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="ImportedLayersSettingsClicked" Fill="#FFa0a0a0" StrokeThickness="1" Data="M6.9565622 1.07109479 C6.27892382 1.33118961 6.43878922 1.8633102 6.72034319 2.85119328 C7.00666926 3.83430397 7.04246002 4.7792356 6.33141694 5.48793433 C6.193026 5.61201626 6.05702112 5.733712 5.92578833 5.86256632 C5.91624413 5.87211108 5.91147203 5.87211108 5.90192783 5.87926966 C5.15032188 6.5569479 4.21021794 6.46388645 3.23909534 6.12743352 C2.26797274 5.78620821 1.74542765 5.59769912 1.44955737 6.25867402 C1.15607315 6.91726274 1.35411535 6.47104502 0.879291275 7.53528621 C0.874519174 7.54483097 0.869747073 7.55198955 0.864974971 7.56630669 C0.387764848 8.62816169 0.585807049 8.18433016 0.294708874 8.83814649 C-0.0011614031 9.50150759 0.485592923 9.76637479 1.38752006 10.2650887 C2.27751694 10.7566441 2.96469952 11.3913709 2.97424372 12.3840263 C2.96231347 12.5701492 2.95515531 12.7586583 2.95515531 12.9447812 C2.95276926 12.9614845 2.94561111 12.9686431 2.94561111 12.9829603 C2.89550405 13.9947052 2.16537256 14.5960254 1.23958492 15.0422431 C0.313797279 15.4860746 -0.192045453 15.7246937 0.0680340648 16.402372 C0.323341481 17.0728916 0.149159786 16.614743 0.566718644 17.7076184 C0.569104695 17.7171632 0.571490745 17.726708 0.576262847 17.7362527 C0.991435654 18.8291282 0.817253959 18.3709795 1.07494743 19.0414992 C1.33264089 19.7215636 1.86711623 19.564075 2.85494119 19.2777321 C3.83799404 18.9937754 4.77809799 18.9579825 5.48914107 19.6642951 C5.61082965 19.8050803 5.73251823 19.9410932 5.86613707 20.0747199 C5.87568127 20.0842647 5.87329522 20.0914232 5.88283942 20.100968 C6.5557057 20.850232 6.46980787 21.7927774 6.12860264 22.7591848 C5.78978345 23.7303645 5.60128545 24.2529404 6.25983542 24.5512142 C6.91838539 24.8423295 6.47219392 24.6442757 7.5363725 25.1239001 C7.5459167 25.1262863 7.54830275 25.1286725 7.55546091 25.1334448 C7.56023301 25.1334448 7.56261906 25.135831 7.56739116 25.135831 C8.63156973 25.6130692 8.18537827 25.410243 8.84154219 25.7061307 C9.50247821 25.9996322 9.76732983 25.5128492 10.2660144 24.6132552 C10.7575408 23.7208198 11.3993885 23.0288244 12.3967576 23.0264382 C12.5757114 23.0359829 12.7594373 23.0431415 12.9407772 23.0431415 C12.9598656 23.0455277 12.9670237 23.0526863 12.9884982 23.0526863 C13.9930255 23.1075687 14.5990823 23.8377431 15.0428877 24.761199 C15.4890792 25.6870411 15.7252982 26.1905274 16.4029366 25.9328188 C17.0734168 25.6751102 16.6200672 25.8493021 17.7104923 25.4341049 C17.7152644 25.4317187 17.7200365 25.4317187 17.7271947 25.4269463 C17.7319668 25.4269463 17.7343528 25.4245601 17.7391249 25.4221739 C18.827164 25.0069767 18.3714284 25.1787825 19.0442946 24.92346 C19.721933 24.6657514 19.5644537 24.1336308 19.2805136 23.1457477 C18.9941876 22.1578647 18.9560108 21.212933 19.676598 20.5018481 C19.8102169 20.3825386 19.9438357 20.263229 20.0702964 20.1367609 C20.0798406 20.1248299 20.0893848 20.1272161 20.1013151 20.1176714 C20.850535 19.4423793 21.7930249 19.5330546 22.7617615 19.8718937 C23.7328841 20.2107328 24.2554292 20.3992419 24.5512995 19.738267 C24.8423976 19.0820645 24.6443554 19.5282822 25.1239516 18.464041 C25.1263377 18.4568824 25.1287237 18.4497238 25.1311098 18.4449515 C25.1334958 18.4401791 25.1334958 18.4354067 25.1358819 18.4330205 C25.613092 17.3687793 25.4102777 17.814997 25.706148 17.1587945 C25.9996322 16.4954334 25.5152639 16.2305662 24.6133368 15.7318523 C23.7161817 15.2379108 23.0242271 14.5984116 23.0242271 13.5962113 C23.0361573 13.417247 23.0409294 13.2406689 23.0409294 13.0617046 C23.0433155 13.042615 23.0528597 13.0330703 23.0528597 13.0115946 C23.1053528 12.004622 23.8354843 11.4033018 24.7612719 10.9594703 C25.6870596 10.5108664 26.1905162 10.2722473 25.9328228 9.59695523 C25.6751293 8.92643556 25.849311 9.38219804 25.4341382 8.28932256 C25.4317521 8.28455018 25.4317521 8.2797778 25.42698 8.27261923 C25.42698 8.26784685 25.424594 8.26307446 25.4222079 8.26068827 C25.0046491 7.17019899 25.1788308 7.62834766 24.9235234 6.95305561 C24.6658299 6.27776355 24.1337406 6.43525216 23.1435296 6.71920889 C22.1580907 7.007938 21.2084425 7.04134467 20.5021716 6.32310118 L20.4997855 6.32310118 C20.380483 6.18947449 20.2611804 6.05584779 20.1347198 5.92937967 C20.1275616 5.9198349 20.1275616 5.91029014 20.1180174 5.90074537 C19.440379 5.1514814 19.531049 4.20893596 19.8722542 3.23775622 C20.2110734 2.26657648 20.3971853 1.74400065 19.7386354 1.44811297 C19.0824714 1.15461148 19.5262769 1.35266533 18.4620983 0.875427129 C18.4525541 0.873040938 18.447782 0.870654747 18.4358517 0.865882365 C18.4358517 0.863496174 18.4358517 0.863496174 18.4334657 0.863496174 C17.366901 0.383871783 17.8130925 0.586698018 17.1569286 0.293196525 C16.4959926 -0.00269115936 16.2287549 0.484091805 15.7324564 1.38368581 C15.2409299 2.27850744 14.5990823 2.97288902 13.5969411 2.97288902 C13.4203733 2.96095806 13.2390335 2.95618568 13.0576936 2.95618568 C13.0386052 2.95379949 13.0338331 2.94664092 13.0123587 2.94425473 C12.0030593 2.89175852 11.3993885 2.16397027 10.955583 1.23812816 C10.5093916 0.309899862 10.2707865 -0.188814057 9.59553418 0.0665083796 C8.91550976 0.326603199 9.39510593 0.142866492 8.25934584 0.577153254 C7.17369281 0.989964297 7.62942847 0.818158545 6.9565622 1.07109479 Z M13 16.6004236 C14.9882251 16.6004236 16.6 14.9885539 16.6 13.0002118 C16.6 11.0118697 14.9882251 9.4 13 9.4 C11.0117749 9.4 9.4 11.0118697 9.4 13.0002118 C9.4 14.9885539 11.0117749 16.6004236 13 16.6004236 Z"/>
+                                        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3348" StrokeThickness="1.5" Stroke="#FFFFFFFF" Data="M6.9565622 1.07109479 C6.27892382 1.33118961 6.43878922 1.8633102 6.72034319 2.85119328 C7.00666926 3.83430397 7.04246002 4.7792356 6.33141694 5.48793433 C6.193026 5.61201626 6.05702112 5.733712 5.92578833 5.86256632 C5.91624413 5.87211108 5.91147203 5.87211108 5.90192783 5.87926966 C5.15032188 6.5569479 4.21021794 6.46388645 3.23909534 6.12743352 C2.26797274 5.78620821 1.74542765 5.59769912 1.44955737 6.25867402 C1.15607315 6.91726274 1.35411535 6.47104502 0.879291275 7.53528621 C0.874519174 7.54483097 0.869747073 7.55198955 0.864974971 7.56630669 C0.387764848 8.62816169 0.585807049 8.18433016 0.294708874 8.83814649 C-0.0011614031 9.50150759 0.485592923 9.76637479 1.38752006 10.2650887 C2.27751694 10.7566441 2.96469952 11.3913709 2.97424372 12.3840263 C2.96231347 12.5701492 2.95515531 12.7586583 2.95515531 12.9447812 C2.95276926 12.9614845 2.94561111 12.9686431 2.94561111 12.9829603 C2.89550405 13.9947052 2.16537256 14.5960254 1.23958492 15.0422431 C0.313797279 15.4860746 -0.192045453 15.7246937 0.0680340648 16.402372 C0.323341481 17.0728916 0.149159786 16.614743 0.566718644 17.7076184 C0.569104695 17.7171632 0.571490745 17.726708 0.576262847 17.7362527 C0.991435654 18.8291282 0.817253959 18.3709795 1.07494743 19.0414992 C1.33264089 19.7215636 1.86711623 19.564075 2.85494119 19.2777321 C3.83799404 18.9937754 4.77809799 18.9579825 5.48914107 19.6642951 C5.61082965 19.8050803 5.73251823 19.9410932 5.86613707 20.0747199 C5.87568127 20.0842647 5.87329522 20.0914232 5.88283942 20.100968 C6.5557057 20.850232 6.46980787 21.7927774 6.12860264 22.7591848 C5.78978345 23.7303645 5.60128545 24.2529404 6.25983542 24.5512142 C6.91838539 24.8423295 6.47219392 24.6442757 7.5363725 25.1239001 C7.5459167 25.1262863 7.54830275 25.1286725 7.55546091 25.1334448 C7.56023301 25.1334448 7.56261906 25.135831 7.56739116 25.135831 C8.63156973 25.6130692 8.18537827 25.410243 8.84154219 25.7061307 C9.50247821 25.9996322 9.76732983 25.5128492 10.2660144 24.6132552 C10.7575408 23.7208198 11.3993885 23.0288244 12.3967576 23.0264382 C12.5757114 23.0359829 12.7594373 23.0431415 12.9407772 23.0431415 C12.9598656 23.0455277 12.9670237 23.0526863 12.9884982 23.0526863 C13.9930255 23.1075687 14.5990823 23.8377431 15.0428877 24.761199 C15.4890792 25.6870411 15.7252982 26.1905274 16.4029366 25.9328188 C17.0734168 25.6751102 16.6200672 25.8493021 17.7104923 25.4341049 C17.7152644 25.4317187 17.7200365 25.4317187 17.7271947 25.4269463 C17.7319668 25.4269463 17.7343528 25.4245601 17.7391249 25.4221739 C18.827164 25.0069767 18.3714284 25.1787825 19.0442946 24.92346 C19.721933 24.6657514 19.5644537 24.1336308 19.2805136 23.1457477 C18.9941876 22.1578647 18.9560108 21.212933 19.676598 20.5018481 C19.8102169 20.3825386 19.9438357 20.263229 20.0702964 20.1367609 C20.0798406 20.1248299 20.0893848 20.1272161 20.1013151 20.1176714 C20.850535 19.4423793 21.7930249 19.5330546 22.7617615 19.8718937 C23.7328841 20.2107328 24.2554292 20.3992419 24.5512995 19.738267 C24.8423976 19.0820645 24.6443554 19.5282822 25.1239516 18.464041 C25.1263377 18.4568824 25.1287237 18.4497238 25.1311098 18.4449515 C25.1334958 18.4401791 25.1334958 18.4354067 25.1358819 18.4330205 C25.613092 17.3687793 25.4102777 17.814997 25.706148 17.1587945 C25.9996322 16.4954334 25.5152639 16.2305662 24.6133368 15.7318523 C23.7161817 15.2379108 23.0242271 14.5984116 23.0242271 13.5962113 C23.0361573 13.417247 23.0409294 13.2406689 23.0409294 13.0617046 C23.0433155 13.042615 23.0528597 13.0330703 23.0528597 13.0115946 C23.1053528 12.004622 23.8354843 11.4033018 24.7612719 10.9594703 C25.6870596 10.5108664 26.1905162 10.2722473 25.9328228 9.59695523 C25.6751293 8.92643556 25.849311 9.38219804 25.4341382 8.28932256 C25.4317521 8.28455018 25.4317521 8.2797778 25.42698 8.27261923 C25.42698 8.26784685 25.424594 8.26307446 25.4222079 8.26068827 C25.0046491 7.17019899 25.1788308 7.62834766 24.9235234 6.95305561 C24.6658299 6.27776355 24.1337406 6.43525216 23.1435296 6.71920889 C22.1580907 7.007938 21.2084425 7.04134467 20.5021716 6.32310118 L20.4997855 6.32310118 C20.380483 6.18947449 20.2611804 6.05584779 20.1347198 5.92937967 C20.1275616 5.9198349 20.1275616 5.91029014 20.1180174 5.90074537 C19.440379 5.1514814 19.531049 4.20893596 19.8722542 3.23775622 C20.2110734 2.26657648 20.3971853 1.74400065 19.7386354 1.44811297 C19.0824714 1.15461148 19.5262769 1.35266533 18.4620983 0.875427129 C18.4525541 0.873040938 18.447782 0.870654747 18.4358517 0.865882365 C18.4358517 0.863496174 18.4358517 0.863496174 18.4334657 0.863496174 C17.366901 0.383871783 17.8130925 0.586698018 17.1569286 0.293196525 C16.4959926 -0.00269115936 16.2287549 0.484091805 15.7324564 1.38368581 C15.2409299 2.27850744 14.5990823 2.97288902 13.5969411 2.97288902 C13.4203733 2.96095806 13.2390335 2.95618568 13.0576936 2.95618568 C13.0386052 2.95379949 13.0338331 2.94664092 13.0123587 2.94425473 C12.0030593 2.89175852 11.3993885 2.16397027 10.955583 1.23812816 C10.5093916 0.309899862 10.2707865 -0.188814057 9.59553418 0.0665083796 C8.91550976 0.326603199 9.39510593 0.142866492 8.25934584 0.577153254 C7.17369281 0.989964297 7.62942847 0.818158545 6.9565622 1.07109479 L6.9565622 1.07109479 Z"/>
+                                    </Canvas>
+                                </Canvas>
+                            </Canvas>
+                        </Canvas>
+
+                    </Grid>
+                </Button>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                <Grid.Style>
+                    <Style>
+                        <Style.Resources>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="Foreground" Value="#FFF" />
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Style="{DynamicResource StreamPreview}">
+                    <Image>
+                        <Image.Source>
+                            <Interop:D3DImage x:Name="previewStream1Image"/>
+                        </Image.Source>
+                    </Image>
+                    <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream1FpsLabel"></Label>
+                </Grid>
+                <Grid Grid.Column="1" Style="{DynamicResource StreamPreview}">
+                    <Image>
+                        <Image.Source>
+                            <Interop:D3DImage x:Name="previewStream2Image"/>
+                        </Image.Source>
+                    </Image>
+                    <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream2FpsLabel"></Label>
+                </Grid>
+                <Grid Grid.Column="2" Style="{DynamicResource StreamPreview}">
+                    <Image>
+                        <Image.Source>
+                            <Interop:D3DImage x:Name="previewStream3Image"/>
+                        </Image.Source>
+                    </Image>
+                    <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream3FpsLabel"></Label>
+                </Grid>
+                <Grid Grid.Column="3" Style="{DynamicResource StreamPreview}">
+                    <Image>
+                        <Image.Source>
+                            <Interop:D3DImage x:Name="previewStream4Image"/>
+                        </Image.Source>
+                    </Image>
+                    <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream4FpsLabel"></Label>
+                </Grid>
+                <Grid Grid.Column="4" Style="{DynamicResource StreamPreview}">
+                    <Image>
+                        <Image.Source>
+                            <Interop:D3DImage x:Name="previewStream5Image"/>
+                        </Image.Source>
+                    </Image>
+                    <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream5FpsLabel"></Label>
+                </Grid>
+            </Grid>
+            <Grid  Grid.Column="1" x:Name="camStreamWrapper" Style="{DynamicResource StreamPreview}" MouseMove="camPreviewWindow_MouseMove" MouseLeftButtonDown="camPreviewWindow_MouseLeftButtonDown" MouseLeftButtonUp="camPreviewWindow_MouseLeftButtonUp">
+                <Image MinWidth="320" MinHeight="240" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <ScaleTransform ScaleX="-1"/>
+                    </Image.RenderTransform>
+                    <Image.Source>
+                        <Interop:D3DImage x:Name="camStreamImage"/>
+                    </Image.Source>
+                </Image>
+                <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="camStreamFpsLabel" Foreground="White"></Label>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

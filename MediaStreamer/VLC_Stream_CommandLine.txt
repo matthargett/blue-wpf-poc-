@@ -1,0 +1,1 @@
+vlc -vvv "bbb_sunflower_1080p_60fps_normal.mp4" --sout=#rtp{sdp=rtsp://localhost:8554/test.sdp} --sout-all --sout-keep

@@ -1,0 +1,182 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MediaStreamer.UI">
+    <Style x:Key="Font-Proxima-Nova">
+        <Setter Property="TextElement.FontFamily" Value="/Fonts/Poxima Nova Regular.otf#Proxima Nova Regular" />
+    </Style>
+    <Style x:Key="Font-Proxima-Nova-Bold">
+        <Setter Property="TextElement.FontFamily" Value="/Fonts/Poxima Nova Bold.otf#Proxima Nova Bold" />
+    </Style>
+
+    <Style TargetType="Control" x:Key="ControlBaseStyle">
+        <Style.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Foreground" Value="#FFFFFF" />
+                <Setter Property="Opacity" Value="0.4" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+        </Style.Resources>
+
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="FlatButton" BasedOn="{StaticResource ControlBaseStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding local:ButtonExtension.CornerRadius}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding local:ButtonExtension.CornerRadius}" Margin="-1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ComboBox" x:Key="FlatComboBox" BasedOn="{StaticResource ControlBaseStyle}">
+        <Setter Property="Background" Value="#1F1F1F"/>
+        <Setter Property="Width" Value="84" />
+        <Setter Property="Height" Value="60" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="5" BorderBrush="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition MaxWidth="18"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Grid.Column="0" Name="ContentSite"
+                                      Content="{TemplateBinding SelectionBoxItem}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                      Margin="3,0,0,0"/>
+                            <ToggleButton Grid.Column="1" Margin="0" Background="{TemplateBinding Background}"
+                                     Height="{TemplateBinding Height}"
+                                     Focusable="False"
+                                     IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                     ClickMode="Press" BorderThickness="0">
+                                <Path Grid.Column="1"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Data="M 0 0 L 4 4 L 8 0 Z"
+                                          Fill="DodgerBlue" />
+                            </ToggleButton>
+                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                                <Grid Name="DropDown"
+                                  SnapsToDevicePixels="True"
+                                  MinWidth="{TemplateBinding ActualWidth}"
+                                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder" BorderThickness="1" CornerRadius="5" Background="Azure" BorderBrush="Black"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <Grid IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="FlatButtonCenter" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="Background" Value="#1F1F1F"/>
+        <Setter Property="Width" Value="84" />
+        <Setter Property="Height" Value="60" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="{x:Type Button}" x:Key="FlatButtonCenterRed" BasedOn="{StaticResource FlatButtonCenter}">
+        <Setter Property="Background" Value="Red"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="DarkRed" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style TargetType="{x:Type Button}" x:Key="FlatButtonRight" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="10, 0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="FlatButtonContactsRight" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="#1F1F1F" />
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Margin" Value="10, 0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="25">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="25" Margin="-1">
+                            <ContentPresenter />
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type Image}" x:Key="ButtonImageCenter">
+        <Setter Property="Stretch" Value="None" />
+    </Style>
+    <Style TargetType="{x:Type Image}" x:Key="ButtonImageRight">
+        <Setter Property="Stretch" Value="None" />
+    </Style>
+    <Style TargetType="{x:Type Rectangle}" x:Key="ButtonCenterSpace">
+        <Setter Property="Fill" Value="#515151" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <Style TargetType="{x:Type Label}" x:Key="HwAcceleratorLabel">
+        <Setter Property="FontSize" Value="18px"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="Gold"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <BlurEffect Radius="3" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Grid}" x:Key="StreamPreview">
+
+        <Style.Resources>
+            <Style TargetType="{x:Type Image}">
+                <Setter Property="Stretch" Value="Uniform" />
+
+                <Setter Property="MinWidth" Value="160" />
+                <Setter Property="MinHeight" Value="120" />
+
+                <Setter Property="MaxWidth" Value="320" />
+                <Setter Property="MaxHeight" Value="240" />
+            </Style>
+        </Style.Resources>
+
+
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Direction="45" Opacity="0.35" BlurRadius="7" ShadowDepth="7" />
+                
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
