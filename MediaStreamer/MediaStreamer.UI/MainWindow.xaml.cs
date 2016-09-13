@@ -31,6 +31,7 @@ namespace MediaStreamer.UI
         }
 
         private CamPreiew _camPreviewSeparateWindow;
+        private bool _isCamPreviewWindowClosed = false;
 
         private readonly WebcamStreamInfo _webcamStream;
 
@@ -50,9 +51,8 @@ namespace MediaStreamer.UI
 
             CompositionTarget.Rendering += CompositionTarget_Rendering;
 
-            StateChanged += MainWindow_StateChanged;
-
             _camPreviewSeparateWindow = new CamPreiew(this);
+            _camPreviewSeparateWindow.Closing += camPreviewSeparateWindow_Closing;
 
             _webcamStream = new WebcamStreamInfo(Settings.Default.CameraIndex,
                 new[] { mainStreamImage, camStreamImage, _camPreviewSeparateWindow.WebcamSurface },
@@ -86,6 +86,11 @@ namespace MediaStreamer.UI
             _timeUpdateTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
 
             Application.Current.Deactivated += Window_Deactivated;
+        }
+
+        private void camPreviewSeparateWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _isCamPreviewWindowClosed = true;
         }
 
         private void AddImageKey(D3DImage key, VideoStreamInfo streamInfo, Window window)
@@ -129,17 +134,7 @@ namespace MediaStreamer.UI
             IsStreaming = !IsStreaming;
         }
 
-        private void MainWindow_StateChanged(object sender, EventArgs e)
-        {
-            if (this.WindowState == WindowState.Minimized || !_isStreaming)
-                return;
-
-            streamer.Next(_webcamStream.Index);
-            foreach (VideoStreamInfo streamInfo in _previewStreams)
-            {
-                streamer.Next(streamInfo.Index);
-            }
-        }
+        
 
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)
@@ -319,24 +314,13 @@ namespace MediaStreamer.UI
             streamer = new Streamer(new WindowInteropHelper(this).Handle);
         }
 
-        private void UpdateCamPreviewVisibility()
-        {
-            bool shouldShowCamPreview = IsStreaming && (WindowState == WindowState.Minimized || !IsActive);
-
-            Debug.WriteLine($"App IsActive: {IsActive}");
-
-            if (shouldShowCamPreview && !_camPreviewSeparateWindow.IsVisible)
-            {
-                _camPreviewSeparateWindow.Show();
-            }
-            else if (!shouldShowCamPreview && _camPreviewSeparateWindow.IsVisible)
-            {
-                _camPreviewSeparateWindow.Hide();
-            }
-        }
-
         private void Window_Deactivated(object sender, EventArgs e)
         {
+            if (_isCamPreviewWindowClosed)
+            {
+                return;
+            }
+
             if (IsStreaming && !_camPreviewSeparateWindow.IsVisible)
             {
                 _camPreviewSeparateWindow.Show();
@@ -345,6 +329,11 @@ namespace MediaStreamer.UI
 
         private void Window_Activated(object sender, EventArgs e)
         {
+            if (_isCamPreviewWindowClosed)
+            {
+                return;
+            }
+
             if (IsStreaming && _camPreviewSeparateWindow.IsVisible)
             {
                 _camPreviewSeparateWindow.Hide();
@@ -362,6 +351,14 @@ namespace MediaStreamer.UI
                 else if (WindowState != WindowState.Minimized && _camPreviewSeparateWindow.IsVisible)
                 {
                     _camPreviewSeparateWindow.Hide();
+                }
+
+                if (WindowState == WindowState.Minimized)
+                    return;
+
+                foreach (VideoStreamInfo streamInfo in _previewStreams)
+                {
+                    streamer.Next(streamInfo.Index);
                 }
             }
         }

@@ -192,3 +192,4 @@ ModelManifest.xml
 MediaStreamer/MediaStreamer.UI/Libs/
 MediaStreamer/MediaStreamer/Libs/
 MediaStreamer/MediaStreamer/Libs/MediaDevice.dll
+*.diagsession
