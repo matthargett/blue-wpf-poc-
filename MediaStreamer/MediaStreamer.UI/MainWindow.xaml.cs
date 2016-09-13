@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -36,11 +35,7 @@ namespace MediaStreamer.UI
         private readonly WebcamStreamInfo _webcamStream;
 
         private readonly VideoFileStreamInfo[] _previewStreams;
-        private readonly Dictionary<D3DImage, VideoStreamInfo> _streamInfoByImage = new Dictionary<D3DImage, VideoStreamInfo>();
         private readonly Dictionary<int, VideoStreamInfo> _streamInfoByIndex = new Dictionary<int, VideoStreamInfo>();
-        private readonly Dictionary<D3DImage, Window> _windowByImage = new Dictionary<D3DImage, Window>();
-
-        private WindowState _stateBeforeMinimize = WindowState.Normal;
 
         private Stopwatch _timeFromLaunch = new Stopwatch();
         private DispatcherTimer _timeUpdateTimer = new DispatcherTimer();
@@ -66,15 +61,6 @@ namespace MediaStreamer.UI
                 new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream5FilePath"], new[] { previewStream5Image }, new[] { previewStream5FpsLabel })
             };
 
-            AddImageKey(mainStreamImage, _webcamStream, this);
-            AddImageKey(camStreamImage, _webcamStream, this);
-            AddImageKey(_camPreviewSeparateWindow.WebcamSurface, _webcamStream, _camPreviewSeparateWindow);
-            AddImageKey(previewStream1Image, _previewStreams[0], this);
-            AddImageKey(previewStream2Image, _previewStreams[1], this);
-            AddImageKey(previewStream3Image, _previewStreams[2], this);
-            AddImageKey(previewStream4Image, _previewStreams[3], this);
-            AddImageKey(previewStream5Image, _previewStreams[4], this);
-
             FloatingToolbarWindow toolbarWindow = new FloatingToolbarWindow(this);
             toolbarWindow.Show();
 
@@ -93,12 +79,6 @@ namespace MediaStreamer.UI
             _isCamPreviewWindowClosed = true;
         }
 
-        private void AddImageKey(D3DImage key, VideoStreamInfo streamInfo, Window window)
-        {
-            _streamInfoByImage[key] = streamInfo;
-            _windowByImage[key] = window;
-        }
-
         private void timeUpdateTimer_Tick(object sender, EventArgs e)
         {
             labelTime.Content = _timeFromLaunch.Elapsed.ToString(@"mm\:ss");
@@ -106,6 +86,38 @@ namespace MediaStreamer.UI
             CommandManager.InvalidateRequerySuggested();
         }
 
+
+        private Stopwatch _frameSync = Stopwatch.StartNew();
+        private const int _minTicksPerFrame = 1000 / 30;
+        private bool _allFramesReady;
+
+        private void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+            if (!IsStreaming)
+                return;
+
+            if (!_allFramesReady)
+                return;
+
+            foreach (VideoStreamInfo streamInfo in _streamInfoByIndex.Values)
+            {
+                if (!streamInfo.IsNewFrameReady)
+                    continue;
+
+                foreach (D3DImage image in streamInfo.Images)
+                {
+                    image.Lock();
+                    image.AddDirtyRect(new Int32Rect(0, 0, streamInfo.Width, streamInfo.Height));
+                    image.Unlock();
+                }
+
+                streamInfo.IsNewFrameReady = false;
+                streamInfo.FlushFpsToScreen();
+            }
+        }
+
+
+        #region DX playback
         public void StartStopVideo()
         {
             if (IsStreaming)
@@ -116,7 +128,10 @@ namespace MediaStreamer.UI
                 }
                 StopDXRendering(_webcamStream);
 
-                _timeFromLaunch.Stop();
+                _streamInfoByIndex.Clear();
+
+                _frameSync.Reset();
+                _timeFromLaunch.Reset();
                 _timeUpdateTimer.Stop();
             }
             else
@@ -127,53 +142,25 @@ namespace MediaStreamer.UI
                 }
                 StartDXRendering(_webcamStream);
 
-                _timeFromLaunch.Restart();
+
+                //playback should be start after filling _streamInfoByIndex collection
+                foreach (var stream in _streamInfoByIndex)
+                {
+                    streamer.Next(stream.Key);
+                }
+
+                _frameSync.Start();
+                _timeFromLaunch.Start();
                 _timeUpdateTimer.Start();
             }
 
             IsStreaming = !IsStreaming;
         }
 
-        
-
-
-        private void CompositionTarget_Rendering(object sender, EventArgs e)
-        {
-            if (!IsStreaming)
-            {
-                return;
-            }
-
-            foreach (VideoStreamInfo streamInfo in _streamInfoByIndex.Values)
-            {
-                if (!streamInfo.IsNewFrameReady)
-                {
-                    continue;
-                }
-
-                foreach (D3DImage image in streamInfo.Images)
-                {
-                    Window wnd = _windowByImage[image];
-                    if (!wnd.IsVisible || wnd.WindowState == WindowState.Minimized)
-                        continue;
-
-                    image.Lock();
-                    image.AddDirtyRect(new Int32Rect(0, 0, streamInfo.Width, streamInfo.Height));
-                    image.Unlock();
-                }
-
-                streamInfo.IsNewFrameReady = false;
-
-                streamInfo.FlushFpsToScreen();
-            }
-        }
-
         private Streamer.RenderCallback _sampleReadyCallback;
 
         private void StartDXRendering(VideoStreamInfo streamInfo)
         {
-            this.WindowState = _stateBeforeMinimize;
-
             IntPtr scene;
             int videoWidth, videoHeight;
 
@@ -201,32 +188,7 @@ namespace MediaStreamer.UI
                 image.Unlock();
             }
 
-            streamer.Next(streamInfo.Index);
-
             streamInfo.IsRunning = true;
-        }
-
-        private void SampleReadyCallback(int index, int fps)
-        {
-            Dispatcher.InvokeAsync(() =>
-            {
-                VideoStreamInfo streamInfo = _streamInfoByIndex[index];
-
-                if (!streamInfo.IsRunning)
-                {
-                    return;
-                }
-
-                if (WindowState == WindowState.Minimized && !(streamInfo is WebcamStreamInfo))
-                {
-                    return;
-                }
-
-                streamer.Next(index);
-
-                streamInfo.IsNewFrameReady = true;
-                streamInfo.SetFps(fps);
-            });
         }
 
         private void StopDXRendering(VideoStreamInfo streamInfo)
@@ -244,6 +206,24 @@ namespace MediaStreamer.UI
             streamInfo.SetFps(0);
         }
 
+        private void SampleReadyCallback(int index, int fps)
+        {
+            VideoStreamInfo streamInfo = _streamInfoByIndex[index];
+
+            if (!streamInfo.IsRunning)
+                return;
+
+            streamer.Next(index);
+
+            streamInfo.IsNewFrameReady = true;
+            streamInfo.SetFps(fps);
+
+            _allFramesReady = _streamInfoByIndex.Values.All(si => si.IsNewFrameReady) || _frameSync.ElapsedMilliseconds >= _minTicksPerFrame;
+            if (_allFramesReady)
+                _frameSync.Restart();
+        }
+
+        #endregion
 
         private Point _anchorPoint = new Point(0, 0);
         private Point _currentPoint;
@@ -309,6 +289,7 @@ namespace MediaStreamer.UI
             StartStopVideo();
         }
 
+        #region Window Event handlers
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             streamer = new Streamer(new WindowInteropHelper(this).Handle);
@@ -352,14 +333,6 @@ namespace MediaStreamer.UI
                 {
                     _camPreviewSeparateWindow.Hide();
                 }
-
-                if (WindowState == WindowState.Minimized)
-                    return;
-
-                foreach (VideoStreamInfo streamInfo in _previewStreams)
-                {
-                    streamer.Next(streamInfo.Index);
-                }
             }
         }
 
@@ -370,8 +343,6 @@ namespace MediaStreamer.UI
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _stateBeforeMinimize = this.WindowState;
-
             labelTitle.FontSize = Math.Max(24, this.ActualWidth / 53);
 
             _camPreviewTransform.X = 0;
@@ -379,5 +350,13 @@ namespace MediaStreamer.UI
             camStreamWrapper.RenderTransform = _camPreviewTransform;
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (IsStreaming)
+            {
+                StartStopVideo();
+            }
+        }
+        #endregion
     }
 }

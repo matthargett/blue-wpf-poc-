@@ -14,8 +14,12 @@
         Loaded="Window_Loaded"
 		Background="LightSteelBlue"
 		Icon="Images/bjn_logo.ico"
-        AutomationProperties.AutomationId="MainWindow" Activated="Window_Activated"
-        Closed="Window_Closed" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
+        AutomationProperties.AutomationId="MainWindow" 
+        Activated="Window_Activated"
+        Closing="Window_Closing"
+        Closed="Window_Closed" 
+        SizeChanged="Window_SizeChanged" 
+        StateChanged="Window_StateChanged">
     <Window.Resources>
         <ResourceDictionary>
 
@@ -396,6 +400,7 @@
                     <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream2FpsLabel"></Label>
                 </Grid>
                 <Grid Grid.Column="2" Style="{DynamicResource StreamPreview}">
+
                     <Image>
                         <Image.Source>
                             <Interop:D3DImage x:Name="previewStream3Image"/>
@@ -420,15 +425,21 @@
                     <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="previewStream5FpsLabel"></Label>
                 </Grid>
             </Grid>
-            <Grid  Grid.Column="1" x:Name="camStreamWrapper" Style="{DynamicResource StreamPreview}" MouseMove="camPreviewWindow_MouseMove" MouseLeftButtonDown="camPreviewWindow_MouseLeftButtonDown" MouseLeftButtonUp="camPreviewWindow_MouseLeftButtonUp">
-                <Image MinWidth="320" MinHeight="240" RenderTransformOrigin="0.5,0.5">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleX="-1"/>
-                    </Image.RenderTransform>
-                    <Image.Source>
-                        <Interop:D3DImage x:Name="camStreamImage"/>
-                    </Image.Source>
-                </Image>
+            <Grid  Grid.Column="1" x:Name="camStreamWrapper" Style="{DynamicResource StreamPreview}" 
+                   MinWidth="320" MinHeight="240"
+                   MouseMove="camPreviewWindow_MouseMove" 
+                   MouseLeftButtonDown="camPreviewWindow_MouseLeftButtonDown" 
+                   MouseLeftButtonUp="camPreviewWindow_MouseLeftButtonUp">
+                <Grid.Background>
+                    <ImageBrush Stretch="Uniform" >
+                        <ImageBrush.RelativeTransform>
+                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="-1" />
+                        </ImageBrush.RelativeTransform>
+                        <ImageBrush.ImageSource>
+                            <Interop:D3DImage x:Name="camStreamImage"/>
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Grid.Background>
                 <Label VerticalAlignment="Bottom" HorizontalAlignment="Left" x:Name="camStreamFpsLabel" Foreground="White"></Label>
             </Grid>
         </Grid>
