@@ -88,7 +88,6 @@
                 <Label FontSize="18px" x:Name="labelTime">00:00</Label>
                 <Label FontSize="18px" Foreground="Red" x:Name="mainStreamFpsLabel">FPS</Label>
                 <Label FontSize="18px" Foreground="Red" x:Name="renderFpsLabel">FPS</Label>
-                <Label FontSize="18px" Foreground="Red" x:Name="videoFpsLabel">FPS</Label>
                 <Label x:Name="camHwEnabled" Style="{DynamicResource HwAcceleratorLabel}"
                        Visibility="Hidden">
                     HW

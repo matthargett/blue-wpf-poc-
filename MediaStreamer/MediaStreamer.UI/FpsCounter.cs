@@ -10,33 +10,44 @@ namespace MediaStreamer.UI
 {
     class FpsCounter
     {
-        public void SetOutput(string legend, Label l)
-        {
-            _legend = legend;
-            _label = l;
-        }
-
         public void Restart()
         {
-            _fpsCounter = 0;
+            _fpsRenderCounter = 0;
+            _fpsRenderCounter = 0;
+            FpsRender = 0;
+            FpsStream = 0;
             _timer.Restart();
         }
 
-        public void Tick()
+        public void RenderIncrement()
         {
-            _fpsCounter++;
+            ++_fpsRenderCounter;
+            AdjustTimer();
+        }
+
+        public void StreamIncrement()
+        {
+            ++_fpsStreamCounter;
+            AdjustTimer();
+        }
+
+        private void AdjustTimer()
+        {
             if (_timer.ElapsedMilliseconds >= 1000)
             {
                 _timer.Restart();
-                if (_label != null)
-                    _label.Content = $"{_legend}: {_fpsCounter} fps";
-                _fpsCounter = 0;
+                FpsRender = _fpsRenderCounter;
+                FpsStream = _fpsStreamCounter;
+                _fpsRenderCounter = 0;
+                _fpsStreamCounter = 0;
             }
         }
 
-        private int _fpsCounter = 0;
+        public int FpsRender {get; private set;}
+        public int FpsStream { get; private set; }
+
+        private int _fpsRenderCounter = 0;
+        private int _fpsStreamCounter = 0;
         private Stopwatch _timer = Stopwatch.StartNew();
-        private Label _label;
-        private string _legend;
     }
 }
