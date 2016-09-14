@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -19,7 +21,7 @@ namespace MediaStreamer.UI
     {
         private Streamer streamer = null;
 
-        private bool _isStreaming = true;
+        private bool _isStreaming = false;
         public bool IsStreaming
         {
             get { return _isStreaming; }
@@ -71,6 +73,8 @@ namespace MediaStreamer.UI
             _timeUpdateTimer.Tick += timeUpdateTimer_Tick;
             _timeUpdateTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
 
+            _minTicksPerFrame = 1000 / Settings.Default.VideoRateFps;
+
             Application.Current.Deactivated += Window_Deactivated;
         }
 
@@ -88,15 +92,19 @@ namespace MediaStreamer.UI
 
 
         private Stopwatch _frameSync = Stopwatch.StartNew();
-        private const int _minTicksPerFrame = 1000 / 30;
-        private bool _allFramesReady;
+        private int _minTicksPerFrame;
+
+        private FpsCounter videoFps = new FpsCounter();
+        private FpsCounter renderFps = new FpsCounter();
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
+            renderFps.Tick();
             if (!IsStreaming)
                 return;
 
-            if (!_allFramesReady)
+            int frameReady = Interlocked.CompareExchange(ref _frameReady, 0, 1);
+            if (frameReady == 0)
                 return;
 
             foreach (VideoStreamInfo streamInfo in _streamInfoByIndex.Values)
@@ -114,6 +122,8 @@ namespace MediaStreamer.UI
                 streamInfo.IsNewFrameReady = false;
                 streamInfo.FlushFpsToScreen();
             }
+
+            videoFps.Tick();
         }
 
 
@@ -206,6 +216,8 @@ namespace MediaStreamer.UI
             streamInfo.SetFps(0);
         }
 
+        object sync = new Object();
+        int _frameReady = 0;
         private void SampleReadyCallback(int index, int fps)
         {
             VideoStreamInfo streamInfo = _streamInfoByIndex[index];
@@ -218,9 +230,15 @@ namespace MediaStreamer.UI
             streamInfo.IsNewFrameReady = true;
             streamInfo.SetFps(fps);
 
-            _allFramesReady = _streamInfoByIndex.Values.All(si => si.IsNewFrameReady) || _frameSync.ElapsedMilliseconds >= _minTicksPerFrame;
-            if (_allFramesReady)
-                _frameSync.Restart();
+            lock(sync)
+            {
+                bool allFramesReady = _streamInfoByIndex.Values.All(si => si.IsNewFrameReady) ||  _frameSync.ElapsedMilliseconds >= _minTicksPerFrame;
+                if (allFramesReady)
+                {
+                    _frameSync.Restart();
+                    Interlocked.Exchange(ref _frameReady, 1);
+                }
+            }
         }
 
         #endregion
@@ -293,6 +311,8 @@ namespace MediaStreamer.UI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             streamer = new Streamer(new WindowInteropHelper(this).Handle);
+            videoFps.SetOutput("Vid", videoFpsLabel);
+            renderFps.SetOutput("Rend", renderFpsLabel);
         }
 
         private void Window_Deactivated(object sender, EventArgs e)

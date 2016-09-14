@@ -86,6 +86,7 @@
     <Compile Include="FloatingToolbarWindow.xaml.cs">
       <DependentUpon>FloatingToolbarWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FpsCounter.cs" />
     <Compile Include="Streamer.cs" />
     <Compile Include="VideoStreamInfo.cs" />
     <Page Include="CamPreiew.xaml">

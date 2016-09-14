@@ -31,5 +31,14 @@ namespace MediaStreamer.UI.Properties {
                 return ((int)(this["CameraIndex"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int VideoRateFps {
+            get {
+                return ((int)(this["VideoRateFps"]));
+            }
+        }
     }
 }

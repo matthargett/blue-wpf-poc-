@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Interop;
 
 namespace MediaStreamer.UI
 {
     internal abstract class VideoStreamInfo
     {
-        private Stopwatch timer = Stopwatch.StartNew();
-        private int innerFpsCounter = 0;
-        private int innerFps = 0;
         private int externalFps = 0;
 
         public int Index { get; set; }
@@ -32,15 +23,6 @@ namespace MediaStreamer.UI
 
         public void SetFps(int fps)
         {
-            innerFpsCounter++;
-            if (timer.ElapsedMilliseconds >= 1000)
-            {
-                timer.Reset();
-                timer.Start();
-                innerFps = innerFpsCounter;
-                innerFpsCounter = 0;
-            }
-
             externalFps = fps;
         }
 
@@ -48,7 +30,7 @@ namespace MediaStreamer.UI
         {
             foreach (Label label in FpsLabels)
             {
-                label.Content = $"FPS: {innerFps}/{externalFps}";
+                label.Content = $"FPS: {externalFps}";
             }
         }
     }
