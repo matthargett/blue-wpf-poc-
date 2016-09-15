@@ -98,7 +98,8 @@ namespace MediaStreamer.UI
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
-            renderFpsLabel.Content = $"FPS [R:{fps.FpsRender} / S:{fps.FpsStream}]";
+            renderFpsLabel.Content = $"Render:{fps.FpsRender} fps.";
+            streamFpsLabel.Content = $"Stream:{fps.FpsStream} fps.";
             fps.RenderIncrement();
             if (!IsStreaming)
                 return;
@@ -182,7 +183,9 @@ namespace MediaStreamer.UI
             {
                 bool isHwEnabled = false;
                 streamInfo.Index = streamer.StartStream(((WebcamStreamInfo)streamInfo).WebcamIndex, out videoWidth, out videoHeight, out scene, out isHwEnabled, _sampleReadyCallback);
-                camHwEnabled.Visibility = isHwEnabled ? Visibility.Visible : Visibility.Hidden;
+                mainStreamFrameSizeLabel.Content = isHwEnabled ?
+                    $"{videoWidth} x {videoHeight} (HWA!)" :
+                    $"{videoWidth} x {videoHeight}";
             }
             else if (streamInfo is VideoFileStreamInfo)
             {

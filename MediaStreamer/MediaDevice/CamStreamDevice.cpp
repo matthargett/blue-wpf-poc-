@@ -195,7 +195,7 @@ namespace media
 
 		SafeRelease(&pAttributes);
 
-		if (ppDevices)
+		if (&ppDevices)
 		{
 			for (DWORD i = 0; i < count; i++)
 			{

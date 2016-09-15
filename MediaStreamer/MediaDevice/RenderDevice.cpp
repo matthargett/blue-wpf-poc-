@@ -12,7 +12,6 @@ namespace media
 			pSurface(NULL),
 			pDX(NULL),
 			pD3DManager(NULL),
-			width(0), height(0),
 			format(D3DFMT_UNKNOWN),
 			pVideoService(NULL)
 		{
@@ -68,7 +67,9 @@ namespace media
 			pp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
 			pp.Windowed = TRUE;
 			pp.hDeviceWindow = hWnd;
-			pp.Flags = D3DPRESENTFLAG_VIDEO;
+			pp.Flags = D3DPRESENTFLAG_VIDEO |
+				D3DPRESENTFLAG_DEVICECLIP /*|
+				D3DPRESENTFLAG_LOCKABLE_BACKBUFFER*/;
 			pp.BackBufferCount = NumberBackBuffers;
 #ifdef DX9EX
 			hr = pDX->CreateDeviceEx(
@@ -106,11 +107,16 @@ namespace media
 			return hr;
 		}
 
+		IDirect3DSurface9 *RenderDevice::GetSurface() const
+		{
+			assert(pSurface != NULL);
+			return pSurface;
+		}
 		HRESULT RenderDevice::CreateVAService(UINT width, UINT height, GUID videoFormat)
 		{
 			HRESULT hr = S_OK;
-			this->width = width;
-			this->height = height;
+			d3dParams.BackBufferWidth = width;
+			d3dParams.BackBufferHeight = height;
 
 			//Create surface for drawing
 			hr = CreateSurface();
@@ -157,9 +163,9 @@ namespace media
 			pDevice = pD3DManager->GetDevice();
 
 			hr = pDevice->CreateRenderTarget(
-				width,
-				height,
-				D3DFMT_X8R8G8B8,
+				d3dParams.BackBufferWidth,
+				d3dParams.BackBufferHeight,
+				d3dParams.BackBufferFormat,
 				D3DMULTISAMPLE_NONE,
 				0,
 				FALSE,	//Lockable buffer!
@@ -177,6 +183,15 @@ namespace media
 
 			return hr;
 
+		}
+		D3DSURFACE_DESC RenderDevice::GetSurfaceDescription(IDirect3DSurface9 *pSurface)
+		{
+			D3DSURFACE_DESC desc;
+			::memset(&desc, 0, sizeof(desc));
+			assert(pSurface != NULL);
+			HRESULT hr = pSurface->GetDesc(&desc);
+			assert(hr == S_OK);
+			return desc;
 		}
 	}
 }

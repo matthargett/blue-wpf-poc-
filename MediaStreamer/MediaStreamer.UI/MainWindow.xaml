@@ -86,12 +86,10 @@
                     </Label.Effect> BlueJeans Design Sprint
                 </Label>
                 <Label FontSize="18px" x:Name="labelTime">00:00</Label>
-                <Label FontSize="18px" Foreground="Red" x:Name="mainStreamFpsLabel">FPS</Label>
-                <Label FontSize="18px" Foreground="Red" x:Name="renderFpsLabel">FPS</Label>
-                <Label x:Name="camHwEnabled" Style="{DynamicResource HwAcceleratorLabel}"
-                       Visibility="Hidden">
-                    HW
-                </Label>
+                <Label FontSize="14px" Foreground="Blue" x:Name="mainStreamFrameSizeLabel">0x0</Label>
+                <Label FontSize="14px" Foreground="Blue" x:Name="mainStreamFpsLabel">Hardware:</Label>
+                <Label FontSize="14px" Foreground="Blue" x:Name="renderFpsLabel">Render:</Label>
+                <Label FontSize="14px" Foreground="Blue" x:Name="streamFpsLabel">Stream</Label>
             </StackPanel>
             <!--Top toolbar area-->
             <Grid Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Hidden">

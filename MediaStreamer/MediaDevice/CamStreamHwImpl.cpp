@@ -23,8 +23,7 @@ namespace media
 
 			IDirect3DSurface9 *CamStreamHwImpl::GetDrawSurface()
 			{
-				assert(pRender->pSurface != NULL);
-				return pRender->pSurface;
+				return pRender->GetSurface();
 			}
 
 			HRESULT CamStreamHwImpl::Next()

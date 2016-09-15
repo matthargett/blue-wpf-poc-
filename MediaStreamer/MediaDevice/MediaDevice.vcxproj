@@ -182,6 +182,7 @@ copy $(TargetPath) $(SolutionDir)MediaStreamer\Libs\MediaDevice.dll /Y</Command>
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="PipelineManager.h" />
     <ClInclude Include="FrameRateControl.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SeekControl.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="FileStreamDevice.h" />
@@ -225,6 +226,9 @@ copy $(TargetPath) $(SolutionDir)MediaStreamer\Libs\MediaDevice.dll /Y</Command>
     </ClCompile>
     <ClCompile Include="FileStreamDevice.cpp" />
     <ClCompile Include="VideoService.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MediaDevice.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

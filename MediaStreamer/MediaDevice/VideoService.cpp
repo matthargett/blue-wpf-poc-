@@ -236,6 +236,7 @@ namespace media
 				&sample,
 				1,
 				NULL);
+			assert(hr == S_OK);
 		}
 
 		bool VideoService::CreateDevice(REFGUID guid)

@@ -54,8 +54,7 @@ namespace media
 
 	IDirect3DSurface9 *FileStreamDevice::GetDrawSurface()
 	{
-		assert(pRender->pSurface != NULL);
-		return pRender->pSurface;
+		return pRender->GetSurface();
 	}
 
 	HRESULT FileStreamDevice::Next()

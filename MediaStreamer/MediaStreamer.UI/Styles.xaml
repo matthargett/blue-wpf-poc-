@@ -148,11 +148,11 @@
         <Setter Property="FontSize" Value="18px"/>
         <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Foreground" Value="Gold"/>
-        <Setter Property="Effect">
+        <!--<Setter Property="Effect">
             <Setter.Value>
                 <BlurEffect Radius="3" />
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 
     <Style TargetType="{x:Type Grid}" x:Key="StreamPreview">
@@ -171,12 +171,12 @@
 
 
         <Setter Property="Margin" Value="5" />
-        <Setter Property="Effect">
+        <!--<Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect Direction="45" Opacity="0.35" BlurRadius="7" ShadowDepth="7" />
                 
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 
 </ResourceDictionary>

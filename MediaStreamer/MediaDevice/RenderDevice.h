@@ -13,9 +13,8 @@ namespace media
 		public:
 			RenderDevice();
 			~RenderDevice();
-			IDirect3DSurface9 *pSurface;
 			D3DManager*		pD3DManager;
-
+			IDirect3DSurface9 *GetSurface() const;
 			HRESULT CreateDevice(HWND hWnd);
 			HRESULT CreateVAService(UINT width, UINT height, GUID videoFormat);
 			void Draw(IDirect3DSurface9 *pSampleSurface);
@@ -32,6 +31,7 @@ namespace media
 #else
 			IDirect3D9 *pDX;
 #endif
+			IDirect3DSurface9 *pSurface;
 			D3DPRESENT_PARAMETERS  d3dParams = { 0 };
 			D3DFORMAT format;
 			VideoService *pVideoService;
@@ -39,6 +39,7 @@ namespace media
 			HRESULT TestCooperativeLevel();
 			HRESULT CreateSurface();
 
+			static D3DSURFACE_DESC GetSurfaceDescription(IDirect3DSurface9 *pSurface);
 
 		};
 	}
