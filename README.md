@@ -4,16 +4,18 @@
 
 - _MediaDevice_ library that is responsible for media part (capturing web camera, streaming video)
 - _MediaStreamer.UI_ WPF based GUI
+- _Tests_ Automation tests
 
 
-## Before first run
+### Before first run
 
 Should be properly configured _MediaStreamer.UI.exe.config_ file.
 
-### Config File
+#### Config File
 Config file contains a few parameters that should be set up correctly:
 - **previewStream1FilePath** - **previewStream5FilePath** - path to file that will be used as stream in FilmStrip area;
 - **CameraIndex** - zero based index of WEB camera that is used.
+- **VideoRateFps** - desired stream update rate (FPS) multiplied to 1.5 The value is approximate.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -40,7 +42,35 @@ Config file contains a few parameters that should be set up correctly:
         <!-- Index of Web camera -->
         <value>0</value>
       </setting>
+      <setting name="VideoRateFps" serializeAs="String">
+        <value>45</value>
+      </setting>
     </MediaStreamer.UI.Properties.Settings>
   </applicationSettings>
 </configuration>
 ```
+
+## Autotests
+
+### Before first run
+
+- download **Agents for Microsoft Visual Studio 2015** from
+[official site](https://www.microsoft.com/en-us/download/details.aspx?id=48152)
+- install with default parameters.
+
+### How to run
+
+For running custom test, you have to edit bat file and add test name :
+_/test:[testname]_
+
+testname: |duration, h
+:--|:-:
+CrazyWindowTest|2
+launchDropApp|1
+startStopVideo|2
+
+All test setting could be found in _\Tests\Settings1.settings_ (all this setting are static, and copping to app.config, after its change you have to rebuild project):<br />
+* **ApplicationPath** - path to application exe file **{default: C:\MediaStreamer\MediaStreamer.UI.exe }**
+* **LaunchApp** - setting for lauching or not application **{default: True}**
+* **ClickCallButton** - setting for clicking call button in CrazyWindowTest test in it start **{default: True}**
+* **LogFolder**- path to folder where all logs will be placed. **{default: C:\MediaStreamer\log }**

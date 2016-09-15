@@ -191,5 +191,5 @@ _Pvt_Extensions/
 ModelManifest.xml
 MediaStreamer/MediaStreamer.UI/Libs/
 MediaStreamer/MediaStreamer/Libs/
-MediaStreamer/MediaStreamer/Libs/MediaDevice.dll
+MediaStreamer/packages/
 *.diagsession
