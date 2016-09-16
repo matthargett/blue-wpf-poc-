@@ -98,10 +98,10 @@ namespace media
 			counter.Tick();
 			if (pSample)
 			{
-				// Get the video frame buffer from the sample.
+		//		// Get the video frame buffer from the sample.
 				hr = pSample->GetBufferByIndex(0, &pBuffer);
 
-				// Draw the frame.
+		//		// Draw the frame.
 				if (SUCCEEDED(hr))
 				{
 					hr = pDevice->DrawSample(pBuffer);
@@ -228,7 +228,9 @@ namespace media
 		// Create the media source for the device.
 		if (SUCCEEDED(hr))
 		{
-			//!!! Leak
+			//!!! Leak, handle still not closed
+			// https://social.msdn.microsoft.com/Forums/en-US/c4ac1950-b8de-4622-bf46-19f897706188/imfactivateactivateobject-memory-leak?forum=mediafoundationdevelopment
+			// /HKLM\SYSTEM\ControlSet001\Control\DeviceClasses\{65E8773D-8F56-11D0-A3B9-00A0C9223196}\##?#USB#VID_046D&PID_0819&MI_00#7&35650338&1&0000#{65e8773d-8f56-11d0-a3b9-00a0c9223196}\#GLOBAL\Device Parameters
 			hr = pActivate->ActivateObject(__uuidof(IMFMediaSource), (void**)&pSource);
 		}
 
@@ -261,7 +263,7 @@ namespace media
 		width = pDevice->GetFrameWidth();
 		height = pDevice->GetFrameHeight();
 		counter.Start();
-
+		
 		SafeRelease(&pSource);
 		LeaveCriticalSection(&csSync);
 		return hr;
