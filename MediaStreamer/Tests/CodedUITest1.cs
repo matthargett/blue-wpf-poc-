@@ -147,9 +147,9 @@ namespace BJ
                 do
                 {
                     helper.ClickCallButton();
-                    Thread.Sleep(20000);
+                    
                     helper.ClickCallButton();
-                    Thread.Sleep(20000);
+                    
                     time = DateTime.Now;
 
                 } while (time < finishTime);

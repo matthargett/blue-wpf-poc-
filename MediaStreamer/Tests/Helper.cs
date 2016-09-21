@@ -91,8 +91,9 @@ namespace BJ
         public void ClickCallButton()
         {
             WpfButton uIItemButton = UIMainWindowWindow1.UIItemButton;
-            
             Mouse.Click(uIItemButton);
+
+            Thread.Sleep(20000);
             log.Info("Click Call Button " + resourceCounter.getCpuAndRamUsage());
             PLogger.WriteCurrentStatistics();
         }

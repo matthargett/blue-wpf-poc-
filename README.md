@@ -52,6 +52,10 @@ Config file contains a few parameters that should be set up correctly:
 
 ## Autotests
 
+All measurements are taken with help of PerformanceCounter class from System.Diagnostics and System.Runtime.InteropServices libraries (for GDI measurements). All data are collected for “MediaStreamer.UI.exe” process.
+
+Custom methods that are using in tests could be found in `Mediastreamer/Tests/ResourceCounter.cs`
+
 ### Before first run
 
 - download **Agents for Microsoft Visual Studio 2015** from

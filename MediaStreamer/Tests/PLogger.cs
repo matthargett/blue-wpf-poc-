@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BJ
 {
@@ -26,13 +22,16 @@ namespace BJ
             csvFileName = logName + " " + String.Format("{0:d.M.yyyy HH-mm}", DateTime.Now) + ".csv";
             CreateReportsDirectory();
             csvOutFile = new StreamWriter(Path.Combine(logDirectory, csvFileName), true);
-            WriteCSV("MediaStreamer Testing");
-
+            
             WriteColumnCSV("Timestamp");
             WriteColumnCSV("RAM");
             WriteColumnCSV("Handles");
             WriteColumnCSV("GDI");
             WriteColumnCSV("Threads");
+            WriteColumnCSV("SOW RAM");
+            WriteColumnCSV("SOW Handles");
+            WriteColumnCSV("SOW GDI");
+            WriteColumnCSV("SOW Threads");
 
         }
 
@@ -70,11 +69,16 @@ namespace BJ
         public static void WriteCurrentStatistics()
         {
             WriteCSV("");
-            WriteColumnCSV(String.Format("{0:d/M/yyyy HH:mm}", DateTime.Now));
+            WriteColumnCSV(String.Format("{0:HH:mm:ss}", DateTime.Now));
             WriteColumnCSV(ResourceCounter.logProcessInfo("Working Set") / 1000000 + "");
             WriteColumnCSV(ResourceCounter.logProcessInfo("Handle Count") + "");
             WriteColumnCSV(ResourceCounter.GetGuiResourcesGDICount() + "");
             WriteColumnCSV(ResourceCounter.logProcessInfo("Thread Count") + "");
+            WriteColumnCSV("400");
+            WriteColumnCSV("3000");
+            WriteColumnCSV("500");
+            WriteColumnCSV("150");
+
 
         }
 
