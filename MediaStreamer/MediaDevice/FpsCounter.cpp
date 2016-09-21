@@ -35,7 +35,7 @@ namespace media
 				clear();
 			}
 
-			lastFrameMs += delayBetweenFramesMs;
+			lastFrameMs += DefaultFps;//delayBetweenFramesMs;
 			return lastFrameMs > passedTimeMs ? (long)(lastFrameMs - passedTimeMs) : 0;
 		}
 

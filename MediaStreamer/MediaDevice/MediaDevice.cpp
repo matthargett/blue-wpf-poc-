@@ -2,6 +2,8 @@
 #include <process.h>
 #include "PipelineManager.h"
 
+int DefaultFps = 34; //FPS for rendering video streams
+
 LPCWSTR szStreamerWindowName = L"StreamerWnd";
 HANDLE hThread = NULL;
 HWND hWndUI = NULL;
@@ -62,6 +64,12 @@ int CreatePipeline(LPCWSTR szAddress, IDirect3DSurface9 **pSurface, int &width, 
 void NextFrame(int index)
 {
 	::SendMessage(hWndStreamer, STREAMER_NEXT, index, NULL);
+}
+
+void SetFrameRate(int fps)
+{
+	if (fps > 1 && fps < 100)
+		DefaultFps = fps;
 }
 
 void Shutdown(int index)

@@ -34,10 +34,19 @@ namespace MediaStreamer.UI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("45")]
         public int VideoRateFps {
             get {
                 return ((int)(this["VideoRateFps"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("34")]
+        public int HWFps {
+            get {
+                return ((int)(this["HWFps"]));
             }
         }
     }

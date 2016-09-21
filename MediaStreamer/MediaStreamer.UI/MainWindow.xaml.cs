@@ -151,6 +151,7 @@ namespace MediaStreamer.UI
             }
             else
             {
+                streamer.SetHwRate(Settings.Default.HWFps);
                 foreach (VideoStreamInfo streamInfo in _previewStreams)
                 {
                     StartDXRendering(streamInfo);

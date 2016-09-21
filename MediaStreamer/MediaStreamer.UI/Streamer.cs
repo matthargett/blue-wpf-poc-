@@ -25,6 +25,9 @@ namespace MediaStreamer.UI
         static extern void NextFrame(int index);
 
         [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        static extern void SetFrameRate(int fps);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
         static extern void Shutdown(int index);
 
 
@@ -48,6 +51,11 @@ namespace MediaStreamer.UI
         public void StopStream(int index)
         {
             Shutdown(index);
+        }
+
+        public void SetHwRate(int fps)
+        {
+            SetFrameRate(fps);
         }
 
         public void Next(int index)

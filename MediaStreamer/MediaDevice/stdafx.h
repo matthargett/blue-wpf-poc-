@@ -72,8 +72,10 @@ extern "C"
 	LIB_API int CreatePipeline(LPCWSTR szAddress, IDirect3DSurface9 **pSurface, int &width, int &heigth, delegate callback);
 	LIB_API int CreateCamStream(int index, IDirect3DSurface9 **pSurface, int &width, int &height, bool& isHwEnabled, delegate callback);
 	LIB_API void NextFrame(int index);
+	LIB_API void SetFrameRate(int fps);
 	LIB_API void Shutdown(int index);
 
 }
 
+extern int DefaultFps;
 extern HMODULE g_hModule;

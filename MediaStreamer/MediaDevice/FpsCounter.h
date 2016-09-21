@@ -18,7 +18,7 @@ namespace media
 			long long frameStart;
 			long long lastFrameMs;
 			int frames;
-			static const int delayBetweenFramesMs = 34; //30fps = 1000ms/30frames
+			//static const int delayBetweenFramesMs = 34; //30fps = 1000ms/30frames
 
 			long long getMilliseconds();
 			bool isSecondGone(long long time);
