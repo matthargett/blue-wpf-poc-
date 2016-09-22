@@ -88,7 +88,7 @@ namespace media
 			hr = pVideoService->GetVideoProcessorDeviceGuids(&g_VideoDesc, &count, &guids);
 			assert(hr == S_OK);
 
-			for (UINT i = 2; i < count; i++)
+			for (UINT i = 0; i < count; i++)
 			{
 				if (CreateDevice(guids[i]))
 				{
@@ -148,30 +148,30 @@ namespace media
 			// DXVA2_VideoProcess_AlphaBlend
 			blt.Alpha = DXVA2_Fixed32OpaqueAlpha();
 
-			// DXVA2_VideoProcess_NoiseFilter
-			hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterLumaLevel, &range);
-			assert(hr == S_OK);
-			blt.NoiseFilterLuma.Level = range.DefaultValue;
+			// DXVA2_VideoProcess_NoiseFilter //DOESNT work for RADEON HD4500
+			//hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterLumaLevel, &range);
+			//assert(hr == S_OK);
+			//blt.NoiseFilterLuma.Level = range.DefaultValue;
 
-			hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterLumaThreshold, &range);
-			assert(hr == S_OK);
-			blt.NoiseFilterLuma.Threshold = range.DefaultValue;
+			//hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterLumaThreshold, &range);
+			//assert(hr == S_OK);
+			//blt.NoiseFilterLuma.Threshold = range.DefaultValue;
 
-			hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterLumaRadius, &range);
-			assert(hr == S_OK);
-			blt.NoiseFilterLuma.Radius = range.DefaultValue;
+			//hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterLumaRadius, &range);
+			//assert(hr == S_OK);
+			//blt.NoiseFilterLuma.Radius = range.DefaultValue;
 
-			hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterChromaLevel, &range);
-			assert(hr == S_OK);
-			blt.NoiseFilterChroma.Level = range.DefaultValue;
+			//hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterChromaLevel, &range);
+			//assert(hr == S_OK);
+			//blt.NoiseFilterChroma.Level = range.DefaultValue;
 
-			hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterChromaThreshold, &range);
-			assert(hr == S_OK);
-			blt.NoiseFilterChroma.Threshold = range.DefaultValue;
+			//hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterChromaThreshold, &range);
+			//assert(hr == S_OK);
+			//blt.NoiseFilterChroma.Threshold = range.DefaultValue;
 
-			hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterChromaRadius, &range);
-			assert(hr == S_OK);
-			blt.NoiseFilterChroma.Radius = range.DefaultValue;
+			//hr = pProcessor->GetFilterPropertyRange(DXVA2_NoiseFilterChromaRadius, &range);
+			//assert(hr == S_OK);
+			//blt.NoiseFilterChroma.Radius = range.DefaultValue;
 
 			
 			// DXVA2_VideoProcess_DetailFilter
