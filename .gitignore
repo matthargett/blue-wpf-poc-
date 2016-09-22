@@ -189,7 +189,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
-MediaStreamer/MediaStreamer.UI/Libs/
-MediaStreamer/MediaStreamer/Libs/
+MediaStreamer/MediaStreamer.UI/Libs/*.dll
 MediaStreamer/packages/
 *.diagsession
