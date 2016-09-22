@@ -98,10 +98,10 @@ namespace media
 			counter.Tick();
 			if (pSample)
 			{
-		//		// Get the video frame buffer from the sample.
+				//		// Get the video frame buffer from the sample.
 				hr = pSample->GetBufferByIndex(0, &pBuffer);
 
-		//		// Draw the frame.
+				//		// Draw the frame.
 				if (SUCCEEDED(hr))
 				{
 					hr = pDevice->DrawSample(pBuffer);
@@ -260,10 +260,21 @@ namespace media
 
 		hr = pDevice->CreateSourceReader(pSource, this);
 
-		width = pDevice->GetFrameWidth();
-		height = pDevice->GetFrameHeight();
-		counter.Start();
-		
+
+		if (FAILED(hr))
+		{
+			delete pDevice;
+			pDevice = NULL;
+		}
+
+
+		if (pDevice != NULL)
+		{
+			width = pDevice->GetFrameWidth();
+			height = pDevice->GetFrameHeight();
+			counter.Start();
+		}
+
 		SafeRelease(&pSource);
 		LeaveCriticalSection(&csSync);
 		return hr;

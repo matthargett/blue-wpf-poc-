@@ -167,37 +167,30 @@ namespace media
 					return hr;
 				}
 
-				// Do we support this type directly?
-				if (presenter::IsFormatSupported(subtype))
-				{
-					bFound = TRUE;
-				}
-				else
-				{
-					// Can we decode this media type to one of our supported
-					// output formats?
 
-					for (DWORD i = 0; ; i++)
+				// Can we decode this media type to one of our supported
+				// output formats?
+
+				for (DWORD i = 2; ; i++)
+				{
+					// Get the i'th format.
+					hr = presenter::GetFormat(i, &subtype);
+					if (FAILED(hr)) { break; }
+
+					hr = pType->SetGUID(MF_MT_SUBTYPE, subtype);
+
+					if (FAILED(hr)) { break; }
+
+					// Try to set this type on the source reader.
+					hr = pReader->SetCurrentMediaType(
+						(DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+						NULL,
+						pType);
+
+					if (SUCCEEDED(hr))
 					{
-						// Get the i'th format.
-						presenter::GetFormat(i, &subtype);
-
-						hr = pType->SetGUID(MF_MT_SUBTYPE, subtype);
-
-						if (FAILED(hr)) { break; }
-
-						// Try to set this type on the source reader.
-						hr = pReader->SetCurrentMediaType(
-							(DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-							NULL,
-							pType
-						);
-
-						if (SUCCEEDED(hr))
-						{
-							bFound = TRUE;
-							break;
-						}
+						bFound = TRUE;
+						break;
 					}
 				}
 
