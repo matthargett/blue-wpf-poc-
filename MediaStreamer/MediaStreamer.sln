@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D4D4264A-6848-44C1-8D05-2BBDD57404D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.Tests", "MediaStreamer.Tests\MediaStreamer.Tests.csproj", "{362EEFC9-C5B3-499B-B891-2A71900E8440}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,18 @@ Global
 		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|Win32.ActiveCfg = Release|Any CPU
 		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|Win32.Build.0 = Release|Any CPU
 		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Win32.Build.0 = Debug|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|x64.Build.0 = Debug|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|Win32.ActiveCfg = Release|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|Win32.Build.0 = Release|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|x64.ActiveCfg = Release|Any CPU
+		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

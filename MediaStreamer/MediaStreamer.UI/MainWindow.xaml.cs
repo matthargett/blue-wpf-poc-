@@ -68,7 +68,7 @@ namespace MediaStreamer.UI
 
             this.DataContext = this;
             IsStreaming = false;
-            _sampleReadyCallback = new Streamer.RenderCallback(SampleReadyCallback);
+            _sampleReadyCallback = new RenderCallback(SampleReadyCallback);
 
             _timeUpdateTimer.Tick += timeUpdateTimer_Tick;
             _timeUpdateTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
@@ -173,7 +173,7 @@ namespace MediaStreamer.UI
             IsStreaming = !IsStreaming;
         }
 
-        private Streamer.RenderCallback _sampleReadyCallback;
+        private RenderCallback _sampleReadyCallback;
 
         private void StartDXRendering(VideoStreamInfo streamInfo)
         {
@@ -306,7 +306,7 @@ namespace MediaStreamer.UI
         #region Window Event handlers
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            streamer = new Streamer(new WindowInteropHelper(this).Handle);
+            streamer = new Streamer(new MediaDeviceWrapper(), new WindowInteropHelper(this).Handle);
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
