@@ -21,7 +21,7 @@ namespace MediaStreamer.Tests
         {
             Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
 
-            _mediaDeviceWrapperMock.Verify(m => m.Init(It.Is<IntPtr>(i => i.ToInt32() == 12345)));
+            _mediaDeviceWrapperMock.Verify(m => m.Init(It.Is<IntPtr>(i => i.ToInt32() == 12346)));
         }
     }
 }
