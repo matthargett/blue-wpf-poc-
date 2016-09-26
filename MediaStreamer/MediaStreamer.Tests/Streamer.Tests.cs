@@ -41,5 +41,75 @@ namespace MediaStreamer.Tests
                 ref height,
                 It.Is<RenderCallback>(c => c == callback)));
         }
+
+        [Test]
+        public void CreateCamStreamIsCalledOnStartStreamFromCamera()
+        {
+            Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
+
+            int width, height;
+            bool isHwEnabled;
+            IntPtr surface;
+            RenderCallback callback = (int x, int y) => { };
+            streamer.StartStream(12345, out width, out height, out surface, out isHwEnabled, callback);
+
+            _mediaDeviceWrapperMock.Verify(m => m.CreateCamStream(
+                It.Is<int>(i => i == 12345),
+                out surface,
+                ref width,
+                ref height,
+                ref isHwEnabled,
+                It.Is<RenderCallback>(c => c == callback)));
+        }
+
+        [Test]
+        public void ShutdownIsCalledOnStopStream()
+        {
+            Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
+
+            streamer.StopStream(123456);
+
+            _mediaDeviceWrapperMock.Verify(m => m.Shutdown(It.Is<int>(i => i == 123456)));
+        }
+
+        [Test]
+        public void SetFrameRateIsCalledOnSetHwRate()
+        {
+            Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
+
+            streamer.SetHwRate(123456);
+
+            _mediaDeviceWrapperMock.Verify(m => m.SetFrameRate(It.Is<int>(i => i == 123456)));
+        }
+
+        [Test]
+        public void NextFrameIsCalledOnNextWithPositiveIndex()
+        {
+            Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
+
+            streamer.Next(123456);
+
+            _mediaDeviceWrapperMock.Verify(m => m.NextFrame(It.Is<int>(i => i == 123456)));
+        }
+
+        [Test]
+        public void NextFrameIsNOTCalledOnNextWithNegativeIndex()
+        {
+            Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
+
+            streamer.Next(-123456);
+
+            _mediaDeviceWrapperMock.Verify(m => m.NextFrame(It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public void NextFrameIsNOTCalledOnNextWithZeroIndex()
+        {
+            Streamer streamer = new Streamer(_mediaDeviceWrapperMock.Object, new IntPtr(12345));
+
+            streamer.Next(0);
+
+            _mediaDeviceWrapperMock.Verify(m => m.NextFrame(It.IsAny<int>()), Times.Never);
+        }
     }
 }

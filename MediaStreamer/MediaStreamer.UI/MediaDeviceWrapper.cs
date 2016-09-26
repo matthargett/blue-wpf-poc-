@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace MediaStreamer.UI
 {
+    /// <summary>
+    /// Encapsulates all work with native MediaFoundation library
+    /// Should remain a simple wrapper without any logic
+    /// </summary>
     internal class MediaDeviceWrapper : IMediaDeviceWrapper
     {
         private const string DLL_PATH = "Libs\\MediaDevice.dll";
