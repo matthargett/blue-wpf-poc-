@@ -1,5 +1,7 @@
 # WPF POC
 
+[![Build status](https://ci.appveyor.com/api/projects/status/uwyn2nexa32hsddu/branch/master?svg=true)](https://ci.appveyor.com/project/matthargett/blue-wpf-poc/branch/master)
+
 ## Project structure
 
 - _MediaDevice_ library that is responsible for media part (capturing web camera, streaming video)
