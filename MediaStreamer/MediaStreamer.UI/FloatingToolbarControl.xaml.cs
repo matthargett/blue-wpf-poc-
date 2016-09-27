@@ -19,7 +19,7 @@ namespace MediaStreamer.UI
     /// </summary>
     public partial class FloatingToolbarControl : UserControl
     {
-        public event Action OnRedButtonClick;
+        public event RoutedEventHandler OnRedButtonClick;
 
         public FloatingToolbarControl()
         {
@@ -54,10 +54,7 @@ namespace MediaStreamer.UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (OnRedButtonClick != null)
-            {
-                OnRedButtonClick();
-            }
+            OnRedButtonClick?.Invoke(sender, e);
         }
     }
 }
