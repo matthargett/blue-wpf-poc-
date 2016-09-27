@@ -31,6 +31,7 @@
 #include <shlwapi.h>
 #include <OleAuto.h>
 #include <Propvarutil.h>
+#include <process.h>
 
 #define DX9EX
 

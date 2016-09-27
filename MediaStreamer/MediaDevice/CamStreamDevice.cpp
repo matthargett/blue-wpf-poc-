@@ -83,7 +83,10 @@ namespace media
 		HRESULT hr = S_OK;
 		IMFMediaBuffer *pBuffer = NULL;
 
-		EnterCriticalSection(&csSync);
+		BOOL isVacant = TryEnterCriticalSection(&csSync);
+
+		if (!isVacant) //if we could not acquire CS it should be about closing
+			return S_OK;
 
 		if (FAILED(hrStatus))
 		{
@@ -98,10 +101,10 @@ namespace media
 			counter.Tick();
 			if (pSample)
 			{
-				//		// Get the video frame buffer from the sample.
+				// Get the video frame buffer from the sample.
 				hr = pSample->GetBufferByIndex(0, &pBuffer);
 
-				//		// Draw the frame.
+				// Draw the frame.
 				if (SUCCEEDED(hr))
 				{
 					hr = pDevice->DrawSample(pBuffer);
@@ -190,6 +193,10 @@ namespace media
 		{
 			hr = SetDevice(ppDevices[camIndex]);
 		}
+		else
+		{
+			hr = SetStaticImage(); // can be used for test purposes, (mocking)
+		}
 		//TODO: error handling no device
 	done:
 
@@ -211,6 +218,20 @@ namespace media
 			//::MessageBox(NULL, L"Cannot create a video capture device", L"MediaLib", MB_OK | MB_ICONEXCLAMATION);
 		//}
 
+		return hr;
+	}
+
+	HRESULT CamStreamDevice::SetStaticImage()
+	{
+		pDevice = reader::impl_::CreateStaticDevice(hWndVideo);
+		if (pDevice == NULL)
+			return E_UNEXPECTED;
+
+		HRESULT hr = pDevice->CreateSourceReader(NULL, this);
+		width = pDevice->GetFrameWidth();
+		height = pDevice->GetFrameHeight();
+		counter.Start();
+		
 		return hr;
 	}
 
