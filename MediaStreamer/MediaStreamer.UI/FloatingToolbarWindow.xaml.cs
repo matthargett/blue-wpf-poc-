@@ -32,7 +32,7 @@ namespace MediaStreamer.UI
             this.DragMove();
         }
 
-        private void FloatingToolbarControl_OnRedButtonClick()
+        private void FloatingToolbarControl_OnRedButtonClick(object sender, RoutedEventArgs e)
         {
             _mainWindow.StartStopVideo();
         }
