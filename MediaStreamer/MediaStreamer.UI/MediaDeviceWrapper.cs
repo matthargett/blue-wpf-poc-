@@ -13,54 +13,57 @@ namespace MediaStreamer.UI
     /// </summary>
     internal class MediaDeviceWrapper : IMediaDeviceWrapper
     {
-        private const string DLL_PATH = "Libs\\MediaDevice.dll";
-
-        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Init")]
-        static extern void ExtInit(IntPtr mainAppHandle);
-
-        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreatePipeline")]
-        static extern int ExtCreatePipeline([MarshalAs(UnmanagedType.LPWStr)]string address, out IntPtr pSurface, ref int width, ref int height, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
-
-        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateCamStream")]
-        static extern int ExtCreateCamStream(int id, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
-
-        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl, EntryPoint = "NextFrame")]
-        static extern void ExtNextFrame(int index);
-
-        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SetFrameRate")]
-        static extern void ExtSetFrameRate(int fps);
-
-        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Shutdown")]
-        static extern void ExtShutdown(int index);
-
         public void Init(IntPtr mainAppHandle)
         {
-            ExtInit(mainAppHandle);
+            NativeMethods.Init(mainAppHandle);
         }
 
         public int CreatePipeline(string address, out IntPtr pSurface, ref int width, ref int height, RenderCallback cb)
         {
-            return ExtCreatePipeline(address, out pSurface, ref width, ref height, cb);
+            return NativeMethods.CreatePipeline(address, out pSurface, ref width, ref height, cb);
         }
 
         public int CreateCamStream(int id, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, RenderCallback cb)
         {
-            return ExtCreateCamStream(id, out pSurface, ref width, ref height, ref isHwEnabled, cb);
+            return NativeMethods.CreateCamStream(id, out pSurface, ref width, ref height, ref isHwEnabled, cb);
         }
 
         public void NextFrame(int index)
         {
-            ExtNextFrame(index);
+            NativeMethods.NextFrame(index);
         }
 
         public void SetFrameRate(int fps)
         {
-            ExtSetFrameRate(fps);
+            NativeMethods.SetFrameRate(fps);
         }
 
         public void Shutdown(int index)
         {
-            ExtShutdown(index);
+            NativeMethods.Shutdown(index);
         }
+    }
+
+    internal static class NativeMethods
+    {
+        private const string DLL_PATH = "Libs\\MediaDevice.dll";
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void Init(IntPtr mainAppHandle);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CreatePipeline([MarshalAs(UnmanagedType.LPWStr)]string address, out IntPtr pSurface, ref int width, ref int height, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CreateCamStream(int id, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void NextFrame(int index);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void SetFrameRate(int fps);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void Shutdown(int index);
     }
 }
