@@ -46,6 +46,7 @@ namespace media
 		HRESULT Initialize(int camIndex);
 		HRESULT ChooseDevice(int camIndex);
 		HRESULT SetDevice(IMFActivate *pActivate);
+		HRESULT SetStaticImage();
 
 		long RefCount;
 		CRITICAL_SECTION csSync;

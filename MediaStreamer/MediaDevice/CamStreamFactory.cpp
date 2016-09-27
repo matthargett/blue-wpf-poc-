@@ -2,7 +2,7 @@
 #include "CamStreamFactory.h"
 #include "CamStreamHwImpl.h"
 #include "CamStreamSwImpl.h"
-#include "CamStreamHwImpl.h"
+#include "CamStreamStaticImpl.h"
 
 namespace media
 {
@@ -38,6 +38,11 @@ namespace media
 			ICamStreamImpl *CreateCamStreamHwDevice(HWND hVideo)
 			{
 				return new (std::nothrow) CamStreamHwImpl(hVideo);
+			}
+
+			ICamStreamImpl *CreateStaticDevice(HWND hVideo)
+			{
+				return new (std::nothrow) CamStreamStaticImpl(hVideo);
 			}
 		}
 	}

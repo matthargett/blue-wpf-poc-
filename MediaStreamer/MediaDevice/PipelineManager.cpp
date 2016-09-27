@@ -136,7 +136,9 @@ namespace media
 
 	void Next(int indexPipeline)
 	{
-		_impl::getStream(indexPipeline)->Next();
+		auto pStream = _impl::getStream(indexPipeline);
+		if (pStream)
+			pStream->Next();
 	}
 #endif
 

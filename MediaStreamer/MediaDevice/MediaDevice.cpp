@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include <process.h>
 #include "PipelineManager.h"
 
 int DefaultFps = 34; //FPS for rendering video streams
@@ -63,7 +62,7 @@ int CreatePipeline(LPCWSTR szAddress, IDirect3DSurface9 **pSurface, int &width, 
 
 void NextFrame(int index)
 {
-	::SendMessage(hWndStreamer, STREAMER_NEXT, index, NULL);
+	::PostMessage(hWndStreamer, STREAMER_NEXT, index, NULL);
 }
 
 void SetFrameRate(int fps)
