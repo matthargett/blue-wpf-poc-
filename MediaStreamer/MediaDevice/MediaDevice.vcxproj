@@ -62,8 +62,7 @@
       <ShowProgress>NotSet</ShowProgress>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)MediaStreamer.UI\Libs\MediaDevice.dll /Y
-</Command>
+      <Command>copy $(TargetPath) $(SolutionDir)MediaStreamer.UI\Libs\MediaDevice.dll /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,8 +85,7 @@
       <AdditionalDependencies>Dxva2.lib;d3d9.lib;mf.lib;mfplat.lib;mfreadwrite.lib;mfuuid.lib;shlwapi.lib;propsys.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)MediaStreamer.UI\Libs\MediaDevice.dll /Y
-</Command>
+      <Command>copy $(TargetPath) $(SolutionDir)MediaStreamer.UI\Libs\MediaDevice.dll /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -98,6 +96,7 @@
     <ClInclude Include="CamStreamDevice.h" />
     <ClInclude Include="CamStreamFactory.h" />
     <ClInclude Include="CamStreamHwImpl.h" />
+    <ClInclude Include="CamStreamStaticImpl.h" />
     <ClInclude Include="CamStreamSwImpl.h" />
     <ClInclude Include="ICamStreamImpl.h" />
     <ClInclude Include="D3DManager.h" />
@@ -111,6 +110,8 @@
     <ClInclude Include="FrameRateControl.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SeekControl.h" />
+    <ClInclude Include="StaticDevice.h" />
+    <ClInclude Include="StaticStreamAsyncHelper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="FileStreamDevice.h" />
     <ClInclude Include="targetver.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="CamStreamDevice.cpp" />
     <ClCompile Include="CamStreamFactory.cpp" />
     <ClCompile Include="CamStreamHwImpl.cpp" />
+    <ClCompile Include="CamStreamStaticImpl.cpp" />
     <ClCompile Include="CamStreamSwImpl.cpp" />
     <ClCompile Include="D3DManager.cpp" />
     <ClCompile Include="device.cpp" />
@@ -139,6 +141,8 @@
     <ClCompile Include="PipelineManager.cpp" />
     <ClCompile Include="FrameRateControl.cpp" />
     <ClCompile Include="SeekControl.cpp" />
+    <ClCompile Include="StaticDevice.cpp" />
+    <ClCompile Include="StaticStreamAsyncHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
