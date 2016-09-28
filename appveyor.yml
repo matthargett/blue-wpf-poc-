@@ -1,0 +1,36 @@
+version: 1.0.{build}
+configuration: Release
+platform: x64
+environment:
+  CodeAnalysisTreatWarningsAsErrors: true
+  LinecoverageThreshold: 1
+nuget:
+  account_feed: true
+  project_feed: true
+before_build:
+- ps: nuget restore MediaStreamer\MediaStreamer.sln
+build:
+  project: MediaStreamer\MediaStreamer.sln
+  verbosity: minimal
+test_script:
+- ps: >-
+    # $env:CONFIGURATION="Release"
+
+    nunit3-console .\MediaStreamer\MediaStreamer.Tests\bin\$env:CONFIGURATION\MediaStreamer.Tests.dll
+
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
+    [xml]$packagesXml = Get-Content .\MediaStreamer\MediaStreamer.Tests\packages.config
+    $opencoverPath = ".\MediaStreamer\packages\OpenCover." + $packagesXml.SelectNodes("//packages/package[@id='OpenCover']").version + "\tools\OpenCover.Console.exe"
+    $reportGeneratorPath = ".\MediaStreamer\packages\ReportGenerator." + $packagesXml.SelectNodes("//packages/package[@id='ReportGenerator']").version + "\tools\ReportGenerator.exe"
+
+    & $opencoverPath -register:user -target:nunit3-console.exe "-targetargs:"".\MediaStreamer\MediaStreamer.Tests\bin\$env:CONFIGURATION\MediaStreamer.Tests.dll"""-filter:"+[MediaStreamer.UI*]*" -output:opencover.xml
+    & $reportGeneratorPath -reports:opencover.xml -targetdir:coverageReport -verbosity:Info -reporttypes:XmlSummary
+
+    [xml]$report = Get-Content .\coverageReport\Summary.xml
+    $lineCoverage = $report.CoverageReport.Summary.Coveredlines / $report.CoverageReport.Summary.Coverablelines * 100
+
+    if ($lineCoverage -lt $env:LinecoverageThreshold) { 
+        Write-Host Line Coverage $lineCoverage is less than needed $env:LinecoverageThreshold -foregroundcolor "red"
+        $host.SetShouldExit(1) 
+    }
