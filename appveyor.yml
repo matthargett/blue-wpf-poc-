@@ -5,75 +5,18 @@ environment:
   CodeAnalysisTreatWarningsAsErrors: true
   LinecoverageThreshold: 1
   AutomationLinecoverageThreshold: 70
-nuget:
-  account_feed: true
-  project_feed: true
 before_build:
 - ps: nuget restore MediaStreamer\MediaStreamer.sln
 build:
   project: MediaStreamer\MediaStreamer.sln
   verbosity: minimal
 test_script:
-- ps: >-
-    Write-Host Running Unit tests -foregroundcolor "green"
-
-    nunit3-console .\MediaStreamer\MediaStreamer.Tests\bin\$env:CONFIGURATION\MediaStreamer.Tests.dll
-
-    if ($LastExitCode -ne 0) {
-        $host.SetShouldExit($LastExitCode)
-        throw "Unit tests failed"
-    }
-
-    [xml]$packagesXml = Get-Content .\MediaStreamer\MediaStreamer.Tests\packages.config
-    $opencoverPath = ".\MediaStreamer\packages\OpenCover." + $packagesXml.SelectNodes("//packages/package[@id='OpenCover']").version + "\tools\OpenCover.Console.exe"
-    $reportGeneratorPath = ".\MediaStreamer\packages\ReportGenerator." + $packagesXml.SelectNodes("//packages/package[@id='ReportGenerator']").version + "\tools\ReportGenerator.exe"
-
-    & $opencoverPath -register:user -target:nunit3-console.exe "-targetargs:"".\MediaStreamer\MediaStreamer.Tests\bin\$env:CONFIGURATION\MediaStreamer.Tests.dll"""-filter:"+[MediaStreamer.UI*]*" -output:opencover.xml
-    & $reportGeneratorPath -reports:opencover.xml -targetdir:coverageReport -verbosity:Info -reporttypes:XmlSummary
-
-    [xml]$report = Get-Content .\coverageReport\Summary.xml
-    $lineCoverage = $report.CoverageReport.Summary.Coveredlines / $report.CoverageReport.Summary.Coverablelines * 100
-
-    if ($lineCoverage -lt $env:LinecoverageThreshold) { 
-        $host.SetShouldExit(1)
-        throw "Line Coverage " +$lineCoverage+ " is less than needed "+ $env:LinecoverageThreshold
-    }
-
-    Write-Host Running Automation tests -foregroundcolor "green"
-
-    $opencoverJob = Start-Job -ScriptBlock {
-        Set-Location $args[0]
-        $opencoverPath = $args[1]
-        & $opencoverPath -register:user -target:".\MediaStreamer\MediaStreamer.UI\bin\$env:CONFIGURATION\MediaStreamer.UI.exe"-filter:"+[MediaStreamer.UI*]*" -output:opencoverAutomation.xml  
-    } -ArgumentList (Get-Item -Path ".\" -Verbose).FullName, $opencoverPath
-
-    $checkProcessStartedJob = Start-Job -ScriptBlock {
-        $proc = $null
-        do {
-            Start-Sleep -Seconds 1
-            $proc = Get-Process MediaStreamer.UI -ErrorAction SilentlyContinue
-        }
-        while (-Not $proc)
-    }
-
-    $checkProcessStartedJob | Wait-Job
-    & vstest.console.exe ".\MediaStreamer\MediaStreamer.AutomationTests\bin\$env:CONFIGURATION\MediaStreamer.AutomationTests.dll"
-
-    if ($LastExitCode -ne 0) {
-        $tempExitCode = $LastExitCode
-        $opencoverJob | Stop-Job
-        $host.SetShouldExit($tempExitCode)
-        throw "Automation tests failed"
-    }
-
-    $opencoverJob | Wait-Job
-
-    & $reportGeneratorPath -reports:opencoverAutomation.xml -targetdir:automationCoverageReport -verbosity:Info -reporttypes:XmlSummary
-
-    [xml]$automationReport = Get-Content .\automationCoverageReport\Summary.xml
-    $automationLineCoverage = $automationReport.CoverageReport.Summary.Coveredlines / $automationReport.CoverageReport.Summary.Coverablelines * 100
-
-    if ($automationLineCoverage -lt $env:AutomationLinecoverageThreshold) { 
-        $host.SetShouldExit(1)
-        throw "Line Coverage " +$automationLineCoverage+ " is less than needed "+ $env:AutomationLinecoverageThreshold
-    }
+- ps: .\appveyor_tests.ps1
+artifacts:
+- path: artifacts/h264_320x240_sample.zip
+  name: video_sample
+- path: MediaStreamer/MediaStreamer.UI/bin/Release
+  name: app
+- path: artifacts/CodedUITest.zip
+  name: automation_test
+deploy: off

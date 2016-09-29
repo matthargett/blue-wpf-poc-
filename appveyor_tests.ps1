@@ -12,11 +12,15 @@
         throw "Unit tests failed"
     }
 
+    # Get package versions
     [xml]$packagesXml = Get-Content .\MediaStreamer\MediaStreamer.Tests\packages.config
     $opencoverPath = ".\MediaStreamer\packages\OpenCover." + $packagesXml.SelectNodes("//packages/package[@id='OpenCover']").version + "\tools\OpenCover.Console.exe"
     $reportGeneratorPath = ".\MediaStreamer\packages\ReportGenerator." + $packagesXml.SelectNodes("//packages/package[@id='ReportGenerator']").version + "\tools\ReportGenerator.exe"
 
+    # Run OpenCover
     & $opencoverPath -register:user -target:nunit3-console.exe "-targetargs:"".\MediaStreamer\MediaStreamer.Tests\bin\$env:CONFIGURATION\MediaStreamer.Tests.dll"""-filter:"+[MediaStreamer.UI*]*" -output:opencover.xml
+
+    # Generate and process report on coverage
     & $reportGeneratorPath -reports:opencover.xml -targetdir:coverageReport -verbosity:Info -reporttypes:XmlSummary
 
     [xml]$report = Get-Content .\coverageReport\Summary.xml
@@ -25,6 +29,9 @@
     if ($lineCoverage -lt $env:LinecoverageThreshold) { 
         $host.SetShouldExit(1)
         throw "Line Coverage " +$lineCoverage+ " is less than needed "+ $env:LinecoverageThreshold
+    }
+    else {
+        Write-Host Unit Tests Line Coverage: +$lineCoverage +"%" -foregroundcolor "green"
     }
 
 # AUTOMATION TESTS
@@ -49,6 +56,8 @@
     }
 
     $checkProcessStartedJob | Wait-Job
+
+    # Application started - Run Automation tests
     & vstest.console.exe ".\MediaStreamer\MediaStreamer.AutomationTests\bin\$env:CONFIGURATION\MediaStreamer.AutomationTests.dll"
 
     if ($LastExitCode -ne 0) {
@@ -58,8 +67,10 @@
         throw "Automation tests failed"
     }
 
+    # Wait until opencover job is completed
     $opencoverJob | Wait-Job
 
+    # Generate and process report on coverage
     & $reportGeneratorPath -reports:opencoverAutomation.xml -targetdir:automationCoverageReport -verbosity:Info -reporttypes:XmlSummary
 
     [xml]$automationReport = Get-Content .\automationCoverageReport\Summary.xml
@@ -68,4 +79,7 @@
     if ($automationLineCoverage -lt $env:AutomationLinecoverageThreshold) { 
         $host.SetShouldExit(1)
         throw "Line Coverage " +$automationLineCoverage+ " is less than needed "+ $env:AutomationLinecoverageThreshold
+    }
+	else {
+        Write-Host Automation Tests Line Coverage: $automationLineCoverage% -foregroundcolor "green"
     }
