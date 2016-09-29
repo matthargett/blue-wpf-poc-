@@ -58,5 +58,29 @@ namespace MediaStreamer.AutomationTests {
                 this["ClickCallButton"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int IterationQuantity {
+            get {
+                return ((int)(this["IterationQuantity"]));
+            }
+            set {
+                this["IterationQuantity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LaunchApp {
+            get {
+                return ((bool)(this["LaunchApp"]));
+            }
+            set {
+                this["LaunchApp"] = value;
+            }
+        }
     }
 }

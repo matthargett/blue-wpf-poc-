@@ -14,22 +14,21 @@ namespace MediaStreamer.AutomationTests
         public void MainTest()
         {
             PLogger.InitPLogger("MainTest");
-            AutHelper.LaunchApp();
+            if (Settings.Default.LaunchApp) { AutHelper.LaunchApp(); }
 
-            if (Settings.Default.ClickCallButton) AutHelper.StarStopVideoButton.ClickButton();
-
-            DateTime time = DateTime.Now;
-            //DateTime finishTime = time.AddHours(2);
+            if (Settings.Default.ClickCallButton) { AutHelper.StarStopVideoButton.ClickButton(); }
 
             TimeSpan timeout = new TimeSpan(0, 0, 0, 0, 500);
 
+            int iterationQuantity = Settings.Default.IterationQuantity;
+            int iter = 0;
             Thread checkerThread = new CheckAppStatus().checkApp(this);
             try
             {
                 checkerThread.Start();
 
-                //do
-                //{
+                do
+                {
                     AutHelper.MoveWindowUp();
                     Thread.Sleep(timeout);
 
@@ -49,7 +48,7 @@ namespace MediaStreamer.AutomationTests
                     Thread.Sleep(timeout);
 
                     AutHelper.ResizeWindowSmall();
-                    Thread.Sleep(timeout);
+                    Thread.Sleep(timeout);                 
 
                     AutHelper.MoveWindowUp();
                     Thread.Sleep(timeout);
@@ -82,9 +81,9 @@ namespace MediaStreamer.AutomationTests
 
                     AutHelper.RestoreFromTaskBar();
                     Thread.Sleep(timeout);
-
-                    time = DateTime.Now;
-                //} while (time < finishTime);
+                    iter++;
+                    
+                } while (iter < iterationQuantity);
             }
             catch (Exception e)
             {

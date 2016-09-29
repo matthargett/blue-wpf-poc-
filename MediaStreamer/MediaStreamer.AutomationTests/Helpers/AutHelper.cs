@@ -21,7 +21,7 @@ namespace MediaStreamer.AutomationTests.Helpers
                 Process.Start(Settings.Default.ApplicationPath);
             }
             //killProcess("MediaStreamer.UI");
-            
+
             CommonHelper.WaitForTrue(() => MainWindow != null, 10, 1000);
         }
 
