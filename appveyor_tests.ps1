@@ -31,7 +31,7 @@
         throw "Line Coverage " +$lineCoverage+ " is less than needed "+ $env:LinecoverageThreshold
     }
     else {
-        Write-Host Unit Tests Line Coverage: +$lineCoverage +"%" -foregroundcolor "green"
+        Write-Host Unit Tests Line Coverage: $lineCoverage% -foregroundcolor "green"
     }
 
 # AUTOMATION TESTS
