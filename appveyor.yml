@@ -1,4 +1,9 @@
 version: 1.1.{build}
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
 configuration: Release
 platform: x64
 environment:
