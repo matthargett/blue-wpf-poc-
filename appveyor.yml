@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 1.1.{build}
 configuration: Release
 platform: x64
 environment:
@@ -15,8 +15,8 @@ test_script:
 artifacts:
 - path: artifacts/h264_320x240_sample.zip
   name: video_sample
-- path: MediaStreamer/MediaStreamer.UI/bin/Release
+- path: MediaStreamer/MediaStreamer.UI/bin/$(CONFIGURATION)
   name: app
-- path: artifacts/CodedUITest.zip
+- path: MediaStreamer/MediaStreamer.AutomationTests/bin/$(CONFIGURATION)
   name: automation_test
 deploy: off
