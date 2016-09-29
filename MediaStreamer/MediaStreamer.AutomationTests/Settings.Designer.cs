@@ -8,16 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BJ {
+namespace MediaStreamer.AutomationTests {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
-    internal sealed partial class Settings1 : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings1 defaultInstance = ((Settings1)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings1())));
+        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
-        public static Settings1 Default {
+        public static Settings Default {
             get {
                 return defaultInstance;
             }
@@ -37,13 +37,13 @@ namespace BJ {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool LaunchApp {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\MediaStreamer\\log")]
+        public string LogFolder {
             get {
-                return ((bool)(this["LaunchApp"]));
+                return ((string)(this["LogFolder"]));
             }
             set {
-                this["LaunchApp"] = value;
+                this["LogFolder"] = value;
             }
         }
         
@@ -56,18 +56,6 @@ namespace BJ {
             }
             set {
                 this["ClickCallButton"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\MediaStreamer\\log")]
-        public string LogFolder {
-            get {
-                return ((string)(this["LogFolder"]));
-            }
-            set {
-                this["LogFolder"] = value;
             }
         }
     }

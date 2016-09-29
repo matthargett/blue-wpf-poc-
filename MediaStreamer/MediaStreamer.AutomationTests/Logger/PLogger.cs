@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MediaStreamer.AutomationTests.Helpers;
+using System;
 using System.IO;
 
-namespace BJ
+namespace MediaStreamer.AutomationTests.Logger
 {
     public static class PLogger
     {
@@ -15,7 +16,7 @@ namespace BJ
 
         public static void InitPLogger(string logName)
         {
-            logDirectory = Settings1.Default.LogFolder;
+            logDirectory = Settings.Default.LogFolder;
 
             string csvFileName = null;
 
@@ -66,10 +67,10 @@ namespace BJ
             csvOutFile.Close();
         }
 
-        public static void WriteCurrentStatistics()
+        public static void WriteCurrentStatistics(string message)
         {
             WriteCSV("");
-            WriteColumnCSV(String.Format("{0:HH:mm:ss}", DateTime.Now));
+            WriteColumnCSV(string.Format("{0:HH:mm:ss}", DateTime.Now));
             WriteColumnCSV(ResourceCounter.logProcessInfo("Working Set") / 1000000 + "");
             WriteColumnCSV(ResourceCounter.logProcessInfo("Handle Count") + "");
             WriteColumnCSV(ResourceCounter.GetGuiResourcesGDICount() + "");
@@ -79,7 +80,7 @@ namespace BJ
             WriteColumnCSV("500");
             WriteColumnCSV("150");
 
-
+            AutHelper.logLog(message + ResourceCounter.getCpuAndRamUsage());
         }
 
 

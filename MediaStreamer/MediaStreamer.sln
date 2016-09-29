@@ -15,9 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		VLC_Stream_CommandLine.txt = VLC_Stream_CommandLine.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D4D4264A-6848-44C1-8D05-2BBDD57404D5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.Tests", "MediaStreamer.Tests\MediaStreamer.Tests.csproj", "{362EEFC9-C5B3-499B-B891-2A71900E8440}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.AutomationTests", "MediaStreamer.AutomationTests\MediaStreamer.AutomationTests.csproj", "{B11F54F5-724F-4041-9B2F-9F7BC8A01533}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{59B07DEC-DC56-4B5B-B950-092CAFD38346}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,16 +51,6 @@ Global
 		{9F7708B1-E2DE-4C0C-8711-21A5429D7CFD}.Release|Win32.Build.0 = Release|Any CPU
 		{9F7708B1-E2DE-4C0C-8711-21A5429D7CFD}.Release|x64.ActiveCfg = Release|Any CPU
 		{9F7708B1-E2DE-4C0C-8711-21A5429D7CFD}.Release|x64.Build.0 = Release|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Debug|Win32.Build.0 = Debug|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|Win32.ActiveCfg = Release|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|Win32.Build.0 = Release|Any CPU
-		{D4D4264A-6848-44C1-8D05-2BBDD57404D5}.Release|x64.ActiveCfg = Release|Any CPU
 		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Debug|Win32.ActiveCfg = Debug|Any CPU
@@ -71,8 +63,24 @@ Global
 		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|Win32.Build.0 = Release|Any CPU
 		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|x64.ActiveCfg = Release|Any CPU
 		{362EEFC9-C5B3-499B-B891-2A71900E8440}.Release|x64.Build.0 = Release|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Debug|Win32.Build.0 = Debug|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Debug|x64.Build.0 = Debug|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Release|Win32.Build.0 = Release|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Release|x64.ActiveCfg = Release|Any CPU
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{362EEFC9-C5B3-499B-B891-2A71900E8440} = {59B07DEC-DC56-4B5B-B950-092CAFD38346}
+		{B11F54F5-724F-4041-9B2F-9F7BC8A01533} = {59B07DEC-DC56-4B5B-B950-092CAFD38346}
 	EndGlobalSection
 EndGlobal

@@ -1,20 +1,8 @@
-version: 1.0.{build}
-configuration: Release
-platform: x64
-environment:
-  CodeAnalysisTreatWarningsAsErrors: true
-  LinecoverageThreshold: 1
-  AutomationLinecoverageThreshold: 70
-nuget:
-  account_feed: true
-  project_feed: true
-before_build:
-- ps: nuget restore MediaStreamer\MediaStreamer.sln
-build:
-  project: MediaStreamer\MediaStreamer.sln
-  verbosity: minimal
-test_script:
-- ps: >-
+# TESTS SCRIPT
+
+    #$env:CONFIGURATION="Release"
+
+# UNIT TESTS
     Write-Host Running Unit tests -foregroundcolor "green"
 
     nunit3-console .\MediaStreamer\MediaStreamer.Tests\bin\$env:CONFIGURATION\MediaStreamer.Tests.dll
@@ -39,14 +27,18 @@ test_script:
         throw "Line Coverage " +$lineCoverage+ " is less than needed "+ $env:LinecoverageThreshold
     }
 
+# AUTOMATION TESTS
+
     Write-Host Running Automation tests -foregroundcolor "green"
 
+    # Run OpenCover in background
     $opencoverJob = Start-Job -ScriptBlock {
         Set-Location $args[0]
         $opencoverPath = $args[1]
         & $opencoverPath -register:user -target:".\MediaStreamer\MediaStreamer.UI\bin\$env:CONFIGURATION\MediaStreamer.UI.exe"-filter:"+[MediaStreamer.UI*]*" -output:opencoverAutomation.xml  
     } -ArgumentList (Get-Item -Path ".\" -Verbose).FullName, $opencoverPath
 
+    # Wait until application started
     $checkProcessStartedJob = Start-Job -ScriptBlock {
         $proc = $null
         do {

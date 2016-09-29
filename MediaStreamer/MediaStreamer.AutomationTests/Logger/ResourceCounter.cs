@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BJ
+namespace MediaStreamer.AutomationTests.Logger
 {
     public class ResourceCounter
     {
@@ -11,7 +15,7 @@ namespace BJ
         static string instanceName = "MediaStreamer.UI";
 
 
-        public static  float logProcessInfo(string counterName)
+        public static float logProcessInfo(string counterName)
         {
             cpuCounter = new PerformanceCounter();
             cpuCounter.CategoryName = "Process";
@@ -46,19 +50,18 @@ namespace BJ
                 return 0;
             }
         }
-
-
+        
         public static int GetGuiResourcesUserCount()
         {
             return GetGuiResources(Process.GetCurrentProcess().Handle, 1);
         }
 
 
-        public string getCpuAndRamUsage()
+        public static string getCpuAndRamUsage()
         {
             return ". RAM: " + logProcessInfo("Working Set") / 1000000 + " MB"
-                 + ", Handels: " + logProcessInfo("Handle Count") 
-                 + ", GDI: " + GetGuiResourcesGDICount() 
+                 + ", Handels: " + logProcessInfo("Handle Count")
+                 + ", GDI: " + GetGuiResourcesGDICount()
                  + ", Threads: " + logProcessInfo("Thread Count");
         }
 

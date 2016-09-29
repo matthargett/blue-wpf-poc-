@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MediaStreamerTests" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ApplicationPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\MediaStreamer\MediaStreamer.UI.exe</Value>
+    </Setting>
+    <Setting Name="LogFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\MediaStreamer\log</Value>
+    </Setting>
+    <Setting Name="ClickCallButton" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
