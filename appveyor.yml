@@ -25,6 +25,8 @@ artifacts:
   name: video_sample
 - path: MediaStreamer/MediaStreamer.UI/bin/$(CONFIGURATION)
   name: app
+- path: artifacts/pcm
+  name: perf_counters
 - path: MediaStreamer/MediaStreamer.AutomationTests/bin/$(CONFIGURATION)
   name: automation_test
 deploy: off
