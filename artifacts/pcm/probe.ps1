@@ -26,7 +26,7 @@ cd $env:APPLICATION_PATH
 
 $PcmCommand = '.\pcm.exe'
 
-#will make samples each 0.2 secs during 200 iteration (40 sec in total)
-& "$PcmCommand" 0.2 -i=200 -csv='pcm_results.csv'
+#will make samples each 0.5 secs during 80 iteration (40 sec in total)
+& "$PcmCommand" 0.5 -i=80 -csv='pcm_results.csv'
 
 Write-Host 'Probing done'
