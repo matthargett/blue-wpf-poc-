@@ -1,12 +1,10 @@
 # WPF POC
 
-[![Build status](https://ci.appveyor.com/api/projects/status/uwyn2nexa32hsddu/branch/master?svg=true)](https://ci.appveyor.com/project/matthargett/blue-wpf-poc/branch/master)
-
 ## Project structure
 
 - _MediaDevice_ library that is responsible for media part (capturing web camera, streaming video)
 - _MediaStreamer.UI_ WPF based GUI
-- _Tests_ Automation tests
+- _MediaStreamer.AutomationTests_ Automation tests
 
 
 ### Before first run
@@ -54,29 +52,22 @@ Config file contains a few parameters that should be set up correctly:
 
 ## Autotests
 
-All measurements are taken with help of PerformanceCounter class from System.Diagnostics and System.Runtime.InteropServices libraries (for GDI measurements). All data are collected for “MediaStreamer.UI.exe” process.
-
-Custom methods that are using in tests could be found in `Mediastreamer/Tests/ResourceCounter.cs`
-
 ### Before first run
 
 - download **Agents for Microsoft Visual Studio 2015** from
 [official site](https://www.microsoft.com/en-us/download/details.aspx?id=48152)
 - install with default parameters.
+- configure `MediaStreamer.AutomationTests.dll.config` file
 
-### How to run
+**_Configuration parameters_** are following:
+- **ApplicationPath** - path to application exe file _{default: C:\MediaStreamer\MediaStreamer.UI.exe }_
+- **LogFolder** - path to log files _{default: C:\MediaStreamer\log }_
+- **ClickCallButton** - setting for clicking call button in MainTest test in it start _{default: True}_
+- **IterationQuantity** - the number of test iterations _{default: 1 }_
+- **LaunchApp** - setting for lauching or not application _{default: True }_
 
-For running custom test, you have to edit bat file and add test name :
-_/test:[testname]_
+### Run tests
+`RunTest.bat` in root folder launches test execution.
 
-testname: |duration, h
-:--|:-:
-CrazyWindowTest|2
-launchDropApp|1
-startStopVideo|2
 
-All test setting could be found in _\Tests\Settings1.settings_ (all this setting are static, and copping to app.config, after its change you have to rebuild project):<br />
-* **ApplicationPath** - path to application exe file **{default: C:\MediaStreamer\MediaStreamer.UI.exe }**
-* **LaunchApp** - setting for lauching or not application **{default: True}**
-* **ClickCallButton** - setting for clicking call button in CrazyWindowTest test in it start **{default: True}**
-* **LogFolder**- path to folder where all logs will be placed. **{default: C:\MediaStreamer\log }**
+
