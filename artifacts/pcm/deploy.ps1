@@ -1,4 +1,4 @@
-#$env:APPLICATION_PATH = 'E:\Projects\Git\blue-wpf-poc\artifacts\pcm'
+#$env:APPLICATION_PATH = 'E:\Projects\Git\blue-wpf-poc-\artifacts\pcm'
 #$PcmCommand = '.\calc.exe'
 
 #Write-Host 'Application path: ' $env:APPLICATION_PATH 
@@ -11,5 +11,5 @@
 #}
 
 cd $env:APPLICATION_PATH
-Start-Process powershell -ArgumentList '.\probe.ps1'
+Start-Process powershell -ArgumentList '.\probe.ps1' -WindowStyle Minimized
 
