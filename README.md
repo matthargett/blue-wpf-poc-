@@ -1,4 +1,4 @@
-# WPF POC
+# WPF POC [![Build status](https://ci.appveyor.com/api/projects/status/95j5iw9jjxrxw39x?svg=true)](https://ci.appveyor.com/project/matthargett/blue-wpf-poc-ynbu5)
 
 ## Project structure
 
@@ -70,4 +70,62 @@ Config file contains a few parameters that should be set up correctly:
 `RunTest.bat` in root folder launches test execution.
 
 
+## AppVeyor
 
+###Build configuration
+
+This application uses AppVeyor for CI, Unit Test runs and build Deployments.
+
+All configuration is done inside appveyor.yml and should work correctly by default.
+
+Here goes an explanation how to setup AppVeyor from scratch. **Prerequisites:** AppVeyor project for this git repo.
+
+#####General tab
+Enable AssemblyInfo patching with default options
+
+#####Environment tab
+Add variables:
+
+- `CodeAnalysisTreatWarningsAsErrors`: `true` for running Roslyn Code Analysis after build. 
+- `LinecoverageThreshold`: Fail build if Line coverage of Unit Tests is less than this number.
+- `AutomationLinecoverageThreshold`: Fail build if Line coverage of Automated UI tests is less than this number.
+
+#####Build tab
+- Default configuration is `Release`
+- Default platform is `x64`
+- Set "Visual Studio solution or project file" to `MediaStreamer\MediaStreamer.sln`
+- "Before build" script should restore nuget packages: `ps: nuget restore MediaStreamer\MediaStreamer.sln`
+
+#####Tests tab
+Running Unit and Automation UI Tests is done by executing powershell script: `.\appveyor_tests.ps1` which can be found in root directory of git repo.
+
+#####Artifacts tab
+To successfully deploy the project into an Environment and run there Automation UI tests some artifacts should be created:
+
+- ```video_sample``` with path ```artifacts/h264_320x240_sample.zip```
+- ```app``` with path ```MediaStreamer/MediaStreamer.UI/bin/$(CONFIGURATION)```
+- ```automation_test``` with path ```MediaStreamer/MediaStreamer.AutomationTests/bin/$(CONFIGURATION)```
+
+That's it
+
+
+###Environment configuration
+**Prerequisites:** Existing Environment in AppVeyor with `AppVeyor Agent` Provider
+
+#####General tab
+- Use **Environment access key** to connect installed AppVeyor Agent
+
+Add some **Provider settings**:
+
+- `video_sample.deploy_app` = `true`
+- `video_sample.path` = `%DEPLOY_ROOT_PATH%\video_sample`
+- `group` = `WPF_POC`
+- `app.deploy_app` = `true`
+- `app.path` = `%DEPLOY_ROOT_PATH%`
+- `automation_test.deploy_app` = `true`
+- `automation_test.path` = `%DEPLOY_ROOT_PATH%\automation`
+- `video_sample.deploy_order` = `1`
+- `app.deploy_order` = `2`
+- `automation_test.deploy_order` = `10`
+
+Add environment variable `DEPLOY_ROOT_PATH` = `c:\MediaStreamer` (Currently it's a default folder for Automation UI tests.
