@@ -18,7 +18,9 @@ namespace MediaStreamer.AutomationTests.Helpers
         {
             if (Process.GetProcessesByName("MediaStreamer.UI").Length <= 0)
             {
-                Process.Start(Settings.Default.ApplicationPath);
+                var startInfo = new ProcessStartInfo(Settings.Default.ApplicationDir + Settings.Default.ApplicationName);
+                startInfo.WorkingDirectory = Settings.Default.ApplicationDir;
+                Process.Start(startInfo);
             }
             //killProcess("MediaStreamer.UI");
 

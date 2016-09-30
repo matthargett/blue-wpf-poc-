@@ -25,13 +25,13 @@ namespace MediaStreamer.AutomationTests {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\MediaStreamer\\MediaStreamer.UI.exe")]
-        public string ApplicationPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\MediaStreamer\\")]
+        public string ApplicationDir {
             get {
-                return ((string)(this["ApplicationPath"]));
+                return ((string)(this["ApplicationDir"]));
             }
             set {
-                this["ApplicationPath"] = value;
+                this["ApplicationDir"] = value;
             }
         }
         
@@ -80,6 +80,18 @@ namespace MediaStreamer.AutomationTests {
             }
             set {
                 this["LaunchApp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MediaStreamer.UI.exe")]
+        public string ApplicationName {
+            get {
+                return ((string)(this["ApplicationName"]));
+            }
+            set {
+                this["ApplicationName"] = value;
             }
         }
     }
