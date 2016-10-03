@@ -74,7 +74,7 @@ Config file contains a few parameters that should be set up correctly:
 
 ## AppVeyor
 
-###Build configuration
+### Build configuration
 
 This application uses AppVeyor for CI, Unit Test runs and build Deployments.
 
@@ -82,26 +82,26 @@ All configuration is done inside appveyor.yml and should work correctly by defau
 
 Here goes an explanation how to setup AppVeyor from scratch. **Prerequisites:** AppVeyor project for this git repo.
 
-#####General tab
+##### General tab
 Enable AssemblyInfo patching with default options
 
-#####Environment tab
+##### Environment tab
 Add variables:
 
 - `CodeAnalysisTreatWarningsAsErrors`: `true` for running Roslyn Code Analysis after build. 
 - `LinecoverageThreshold`: Fail build if Line coverage of Unit Tests is less than this number.
 - `AutomationLinecoverageThreshold`: Fail build if Line coverage of Automated UI tests is less than this number.
 
-#####Build tab
+##### Build tab
 - Default configuration is `Release`
 - Default platform is `x64`
 - Set "Visual Studio solution or project file" to `MediaStreamer\MediaStreamer.sln`
 - "Before build" script should restore nuget packages: `ps: nuget restore MediaStreamer\MediaStreamer.sln`
 
-#####Tests tab
+##### Tests tab
 Running Unit and Automation UI Tests is done by executing powershell script: `.\appveyor_tests.ps1` which can be found in root directory of git repo.
 
-#####Artifacts tab
+##### Artifacts tab
 To successfully deploy the project into an Environment and run there Automation UI tests some artifacts should be created:
 
 - ```video_sample``` with path ```artifacts/h264_320x240_sample.zip```
@@ -111,10 +111,14 @@ To successfully deploy the project into an Environment and run there Automation 
 That's it
 
 
-###Environment configuration
+### Local Environment configuration
 **Prerequisites:** Existing Environment in AppVeyor with `AppVeyor Agent` Provider
 
-#####General tab
+To be able run UI Tests the agent must be run as user with administrative privilege, not as a service. To do so, the service must be stoped and the agent should be ran as administrator manually.
+
+_Windows 7_ Work on Windows 7 officially is not supported, but it works. Before to deploy Power Shell for Windows 7 should be updated to version 3.0 or above. [Details](https://social.technet.microsoft.com/wiki/contents/articles/21016.how-to-install-windows-powershell-4-0.aspx) 
+
+##### General tab
 - Use **Environment access key** to connect installed AppVeyor Agent
 
 Add some **Provider settings**:
@@ -126,8 +130,11 @@ Add some **Provider settings**:
 - `app.path` = `%DEPLOY_ROOT_PATH%`
 - `automation_test.deploy_app` = `true`
 - `automation_test.path` = `%DEPLOY_ROOT_PATH%\automation`
+- `perf_counters.deploy_app` = `true`
+- `perf_counters.path` = `%DEPLOY_ROOT_PATH%\pcm`
 - `video_sample.deploy_order` = `1`
 - `app.deploy_order` = `2`
+- `perf_counters.deploy_order` = `3`
 - `automation_test.deploy_order` = `10`
 
 Add environment variable `DEPLOY_ROOT_PATH` = `c:\MediaStreamer` (Currently it's a default folder for Automation UI tests.
