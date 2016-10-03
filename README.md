@@ -4,20 +4,30 @@
 
 ## Project structure
 
-- _MediaDevice_ library that is responsible for media part (capturing web camera, streaming video)
-- _MediaStreamer.UI_ WPF based GUI
-- _MediaStreamer.AutomationTests_ Automation tests
+- `.\MediaStreamer\MediaDevice` - native library that is responsible for media part (capturing web camera, streaming video)
+- `.\MediaStreamer\MediaStreamer.UI` - WPF based GUI
+- `.\MediaStreamer\MediaStreamer.Tests` - Unit tests (NUnit)
+- `.\MediaStreamer\MediaStreamer.AutomationTests` - Automated UI tests
+##
+- `.\appveyor.yml` - AppVeyor Continuous Integration configuration file
+- `.\appveyor_tests.ps1` - Unit tests and Automation UI script for AppVeyor CI
+- `.\MediaStreamer\MediaStreamer.AutomationTests\deploy.ps1` - Deployment script wit send mail functionality for AppVeyor
+- `.\MediaStreamer\RunTests.bat` - simple batch script for running Automation UI manually
+- `.\MediaStreamer\VLC_Stream_CommandLine.txt` - sample command for configuring VLC for streaming
+##
+- `.\artifacts\h264_320x240_sample.zip` - sample video file for testing purposes
 
-
+##
 ### Before first run
 
 Should be properly configured _MediaStreamer.UI.exe.config_ file.
 
 #### Config File
 Config file contains a few parameters that should be set up correctly:
-- **previewStream1FilePath** - **previewStream5FilePath** - path to file that will be used as stream in FilmStrip area;
-- **CameraIndex** - zero based index of WEB camera that is used.
-- **VideoRateFps** - desired stream update rate (FPS) multiplied to 1.5 The value is approximate.
+
+- `previewStream1FilePath`...`previewStream5FilePath` - path to file that will be used as stream in FilmStrip area;
+- `CameraIndex` - zero based index of WEB camera that is used.
+- `VideoRateFps` - desired stream update rate (FPS) multiplied to 1.5 The value is approximate.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -62,11 +72,12 @@ Config file contains a few parameters that should be set up correctly:
 - configure `MediaStreamer.AutomationTests.dll.config` file
 
 **_Configuration parameters_** are following:
-- **ApplicationPath** - path to application exe file _{default: C:\MediaStreamer\MediaStreamer.UI.exe }_
-- **LogFolder** - path to log files _{default: C:\MediaStreamer\log }_
-- **ClickCallButton** - setting for clicking call button in MainTest test in it start _{default: True}_
-- **IterationQuantity** - the number of test iterations _{default: 1 }_
-- **LaunchApp** - setting for lauching or not application _{default: True }_
+
+- `ApplicationPath` - path to application exe file _{default: C:\MediaStreamer\MediaStreamer.UI.exe }_
+- `LogFolder` - path to log files _{default: C:\MediaStreamer\log }_
+- `ClickCallButton` - setting for clicking call button in MainTest test in it start _{default: True}_
+- `IterationQuantity` - the number of test iterations _{default: 1 }_
+- `LaunchApp` - setting for lauching or not application _{default: True }_
 
 ### Run tests
 `RunTest.bat` in root folder launches test execution.
