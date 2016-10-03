@@ -1,4 +1,6 @@
-# WPF POC [![Build status](https://ci.appveyor.com/api/projects/status/95j5iw9jjxrxw39x?svg=true)](https://ci.appveyor.com/project/matthargett/blue-wpf-poc-ynbu5)
+# WPF POC
+
+[![Build status](https://ci.appveyor.com/api/projects/status/95j5iw9jjxrxw39x/branch/master?svg=true)](https://ci.appveyor.com/project/matthargett/blue-wpf-poc-ynbu5/branch/master)
 
 ## Project structure
 
