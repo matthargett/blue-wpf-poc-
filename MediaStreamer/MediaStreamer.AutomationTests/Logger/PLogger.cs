@@ -48,7 +48,7 @@ namespace MediaStreamer.AutomationTests.Logger
             {
                 Directory.CreateDirectory(logDirectory);
             }
-            Console.WriteLine("Report will be written to: {0}", logDirectory);
+            Console.WriteLine($"Report will be written to: {logDirectory}");
         }
 
 

@@ -46,7 +46,7 @@ namespace MediaStreamer.AutomationTests.Helpers
             int xCurrent = Cursor.Position.X;
             int yCurrent = Cursor.Position.Y;
 
-            Console.WriteLine("Mouse Move and Up on X axis: {0}, and on Y axix {1}", xTarget, yTarget);
+            Console.WriteLine($"Mouse Move and Up on X axis: {xTarget}, and on Y axix {yTarget}");
 
             int yIncrement = (yCurrent < yTarget) ? 1 : (-1);
             int xIncrement = (xCurrent < xTarget) ? 1 : (-1);
