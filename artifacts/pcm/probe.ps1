@@ -27,13 +27,13 @@ cd $env:APPLICATION_PATH
 $PcmCommand = '.\pcm.exe'
 
 #will make samples each 0.5 secs during 80 iteration (40 sec in total)
-& "$PcmCommand" 0.5 -i=8 -csv='pcm_results.csv'
+& "$PcmCommand" 0.5 -i=90 -csv='pcm_results.csv'
 
 Write-Host 'Probing done'
 Write-Host 'Analyzing'
 
 $ParserCommand = '.\pcmcsvparse.exe'
-& "$ParserCommand" -f pcm_results.csv -p L2MISS 0.5  -p L3MISS 5.5
+& "$ParserCommand" -f pcm_results.csv -p L2MISS 10.5  -p L3MISS 10.5
 
 if ($?) {
     Write-Host 'Profiling succeeded!'
