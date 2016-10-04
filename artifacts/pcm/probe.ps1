@@ -33,7 +33,7 @@ Write-Host 'Probing done'
 Write-Host 'Analyzing'
 
 $ParserCommand = '.\pcmcsvparse.exe'
-& "$ParserCommand" -f pcm_results.csv -p L2MISS 5.5  -p L3MISS 5.5
+& "$ParserCommand" -f pcm_results.csv -p L2MISS 0.5  -p L3MISS 5.5
 
 if ($?) {
     Write-Host 'Profiling succeeded!'
@@ -120,11 +120,11 @@ $shortCommitId = $commitID.Substring(0,10)
 
 If ($testsPassed -eq $true)
 {
-    $bodyString = "<span><a style='font-size:15pt;font-family:Segoe UI;color:#078DC7' href="+$deploymentLink+">Deployment "+$projectName + " "+$buildVersion+ " completed"+"</a>"+"</span><br/><br/>"
+    $bodyString = "<span><a style='font-size:15pt;font-family:Segoe UI;color:#078DC7' href="+$deploymentLink+">Profiling "+$projectName + " "+$buildVersion+ " completed"+"</a>"+"</span><br/><br/>"
 }
 Else
 {
-    $bodyString = "<span><a style='font-size:15pt;font-family:Segoe UI;color:red' href="+$deploymentLink+">Deployment "+$projectName + " "+$buildVersion+ " completed"+"</a>"+"</span><br/><br/>"
+    $bodyString = "<span><a style='font-size:15pt;font-family:Segoe UI;color:red' href="+$deploymentLink+">Profiling "+$projectName + " "+$buildVersion+ " completed"+"</a>"+"</span><br/><br/>"
 }
 
 If ($committerEmail -eq $null)
