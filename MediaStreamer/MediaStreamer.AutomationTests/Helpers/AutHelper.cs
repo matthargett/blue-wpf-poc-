@@ -74,9 +74,15 @@ namespace MediaStreamer.AutomationTests.Helpers
         {
             get
             {
-                return RunningApplications.FindFirst(TreeScope.Descendants, new AndCondition(
-                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Button),
-                    new PropertyCondition(AutomationElement.NameProperty, "MediaStreamer.UI - MainWindow")));
+                AutomationElementCollection buttons = RunningApplications.FindAll(TreeScope.Descendants,
+                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Button));
+
+                foreach (AutomationElement button in buttons)
+                {
+                    if (button.Current.Name.Contains("MediaStreamer.UI"))
+                        return button;
+                }
+                return null;
             }
         }
 
@@ -201,7 +207,7 @@ namespace MediaStreamer.AutomationTests.Helpers
             int xpoint = (int)(rect.X + x_offset);
             int ypoint = (int)(rect.Y + y_offset);
 
-            Console.WriteLine("Clicking on X axis: {0}, and on Y axix {1}", xpoint, ypoint);
+            Console.WriteLine($"Clicking on X axis: {xpoint}, and on Y axix {ypoint}");
             MouseEmulate.Move(xpoint, ypoint);
             Thread.Sleep(500);
         }

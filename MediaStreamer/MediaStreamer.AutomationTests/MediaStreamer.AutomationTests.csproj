@@ -61,7 +61,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Helpers\AutHelper.cs" />
-    <Compile Include="Helpers\CheckAppStatus.cs" />
     <Compile Include="Helpers\CommonHelper.cs" />
     <Compile Include="Helpers\MouseEmulate.cs" />
     <Compile Include="Logger\Logger.cs" />
