@@ -1,3 +1,4 @@
+SPECIAL ERROR TO TEST BUILD FAILURE
 #pragma once
 #include "ICamStreamImpl.h"
 #include "device.h"
