@@ -52,15 +52,15 @@ namespace MediaStreamer.UI
             _camPreviewSeparateWindow.Closing += camPreviewSeparateWindow_Closing;
 
             _webcamStream = new WebcamStreamInfo(Settings.Default.CameraIndex,
-                new[] { mainStreamImage, camStreamImage, _camPreviewSeparateWindow.WebcamSurface },
-                new[] { mainStreamFpsLabel, camStreamFpsLabel, _camPreviewSeparateWindow.WebcamFpsLabel });
+                new[] { mainStreamImage/*, camStreamImage, _camPreviewSeparateWindow.WebcamSurface*/ },
+                new[] { mainStreamFpsLabel/*, camStreamFpsLabel, _camPreviewSeparateWindow.WebcamFpsLabel*/ });
             _previewStreams = new VideoFileStreamInfo[]
             {
-                new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream1FilePath"], new[] { previewStream1Image }, new[] { previewStream1FpsLabel }),
-                new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream2FilePath"], new[] { previewStream2Image }, new[] { previewStream2FpsLabel }),
-                new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream3FilePath"], new[] { previewStream3Image }, new[] { previewStream3FpsLabel }),
-                new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream4FilePath"], new[] { previewStream4Image }, new[] { previewStream4FpsLabel }),
-                new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream5FilePath"], new[] { previewStream5Image }, new[] { previewStream5FpsLabel })
+ //               new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream1FilePath"], new[] { previewStream1Image }, new[] { previewStream1FpsLabel }),
+ //               new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream2FilePath"], new[] { previewStream2Image }, new[] { previewStream2FpsLabel }),
+ //               new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream3FilePath"], new[] { previewStream3Image }, new[] { previewStream3FpsLabel }),
+ //               new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream4FilePath"], new[] { previewStream4Image }, new[] { previewStream4FpsLabel }),
+ //               new VideoFileStreamInfo(ConfigurationManager.AppSettings["previewStream5FilePath"], new[] { previewStream5Image }, new[] { previewStream5FpsLabel })
             };
 
             FloatingToolbarWindow toolbarWindow = new FloatingToolbarWindow(this);

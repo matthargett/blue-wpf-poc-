@@ -90,6 +90,12 @@
     <ClInclude Include="StaticStreamAsyncHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FrameFormatControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMedia.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +159,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StaticStreamAsyncHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameFormatControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMedia.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

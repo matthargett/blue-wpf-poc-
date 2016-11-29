@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CamStreamDevice.h"
 #include "CamStreamFactory.h"
+#include "FrameFormatControl.h"
 
 namespace media
 {
@@ -278,6 +279,13 @@ namespace media
 		{
 			pDevice = reader::impl_::CreateCamStreamDevice(&MediaType[0], mediaSize, hWndVideo);
 		}
+
+		media::reader::FrameFormatControl format(pSource);
+		hr = format.Enumerate();
+		assert(hr == S_OK);
+//		hr = format.Set(8);
+//		assert(hr == S_OK);
+
 
 		hr = pDevice->CreateSourceReader(pSource, this);
 

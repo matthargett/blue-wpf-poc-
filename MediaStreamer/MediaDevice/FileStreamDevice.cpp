@@ -301,7 +301,7 @@ namespace media
 				&pSource
 			);
 
-			assert(ObjectType == MF_OBJECT_MEDIASOURCE);
+		//	assert(ObjectType == MF_OBJECT_MEDIASOURCE);
 
 		}
 

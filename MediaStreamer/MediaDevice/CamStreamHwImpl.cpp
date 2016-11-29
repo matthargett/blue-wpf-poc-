@@ -2,6 +2,7 @@
 #include "CamStreamHwImpl.h"
 #include "RenderDevice.h"
 #include "ImageTransformers.h"
+#include "DebugMedia.h"
 
 namespace media
 {
@@ -110,7 +111,7 @@ namespace media
 				// Try to find a suitable output type.
 				if (SUCCEEDED(hr))
 				{
-					for (DWORD i = 0; ; i++)
+					for (DWORD i = 8; ; i++)
 					{
 						hr = pReader->GetNativeMediaType(
 							(DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
@@ -126,6 +127,7 @@ namespace media
 						if (SUCCEEDED(hr))
 						{
 							// Found an output type.
+							media::_impl::DBGMSG(L"Index selected: %d\n\n", i);
 							break;
 						}
 					}
