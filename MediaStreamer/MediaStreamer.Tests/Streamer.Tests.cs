@@ -55,6 +55,7 @@ namespace MediaStreamer.Tests
 
             _mediaDeviceWrapperMock.Verify(m => m.CreateCamStream(
                 It.Is<int>(i => i == 12345),
+                It.Is<int>(i => i == 0),
                 out surface,
                 ref width,
                 ref height,

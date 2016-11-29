@@ -28,6 +28,7 @@ Config file contains a few parameters that should be set up correctly:
 - `previewStream1FilePath`...`previewStream5FilePath` - path to file that will be used as stream in FilmStrip area;
 - `CameraIndex` - zero based index of WEB camera that is used.
 - `VideoRateFps` - desired stream update rate (FPS) multiplied to 1.5 The value is approximate.
+- `CameraFrameFormat` - Frame resolution and FPS that will be set for WebCamera - if there is no desired format, web camera will be disabled.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -56,6 +57,9 @@ Config file contains a few parameters that should be set up correctly:
       </setting>
       <setting name="VideoRateFps" serializeAs="String">
         <value>45</value>
+      </setting>
+       <setting name="CameraFrameFormat" serializeAs="String">
+        <value>640x360@30</value>
       </setting>
     </MediaStreamer.UI.Properties.Settings>
   </applicationSettings>

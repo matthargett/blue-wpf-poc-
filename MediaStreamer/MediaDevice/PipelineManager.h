@@ -7,6 +7,7 @@ namespace media
 		LPCWSTR szAddress;	//[in] address of mediasource (NULL for WebCam)
 		int index;			//[in, out] input: index of WebCam, not use for mediafile,
 							//output: index of pipeline for further control
+		int prefferableMode;	//[in] Camera resolution and FPS
 		LPDIRECT3DSURFACE9 pISurface; //[out] DirectX Surface for drawing
 		int width;			//[out] width of frame
 		int height;			//[out] height of frame

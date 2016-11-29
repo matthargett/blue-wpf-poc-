@@ -11,8 +11,8 @@ namespace media
 			class ICamStreamImpl
 			{
 			public:
-				ICamStreamImpl()
-					: height(0), width(0)
+				ICamStreamImpl(int prefferableMode)
+					: height(0), width(0), prefferableMode(prefferableMode)
 				{
 				}
 
@@ -37,9 +37,15 @@ namespace media
 					return height;
 				}
 
+				int GetPrefferableMode() const
+				{
+					return prefferableMode;
+				}
+
 			protected:
 				UINT32 height;
 				UINT32 width;
+				int prefferableMode;
 			};
 		}
 	}

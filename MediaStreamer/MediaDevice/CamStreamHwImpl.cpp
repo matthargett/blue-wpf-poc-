@@ -2,7 +2,7 @@
 #include "CamStreamHwImpl.h"
 #include "RenderDevice.h"
 #include "ImageTransformers.h"
-#include "DebugMedia.h"
+#include "FrameFormatControl.h"
 
 namespace media
 {
@@ -11,9 +11,11 @@ namespace media
 		namespace impl_
 		{
 
-			CamStreamHwImpl::CamStreamHwImpl(HWND hWndVideo)
-				: hVideo(hWndVideo),
-				pReader(NULL), pRender(NULL)
+			CamStreamHwImpl::CamStreamHwImpl(HWND hWndVideo, int prefferableMode)
+				: ICamStreamImpl(prefferableMode),
+				hVideo(hWndVideo),
+				pReader(NULL),
+				pRender(NULL)
 			{
 			}
 
@@ -111,7 +113,7 @@ namespace media
 				// Try to find a suitable output type.
 				if (SUCCEEDED(hr))
 				{
-					for (DWORD i = 8; ; i++)
+					for (DWORD i = 0; ; i++)
 					{
 						hr = pReader->GetNativeMediaType(
 							(DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
@@ -121,13 +123,27 @@ namespace media
 						if (FAILED(hr)) { break; }
 
 
-						hr = TryMediaType(pType);
+						auto preffer = GetPrefferableMode();
+						if (preffer != 0)
+						{
+							auto frameFormat = media::reader::FrameFormatControl::GetFormat(pType);
+							auto s = frameFormat.Serialize();
+
+							if (preffer == s)
+								hr = TryMediaType(pType);
+							else
+								hr = E_INVALIDARG;
+						}
+						else
+						{
+							hr = TryMediaType(pType);
+						}
+
 						SafeRelease(&pType);
 
 						if (SUCCEEDED(hr))
 						{
 							// Found an output type.
-							media::_impl::DBGMSG(L"Index selected: %d\n\n", i);
 							break;
 						}
 					}

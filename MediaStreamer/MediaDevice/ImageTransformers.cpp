@@ -26,7 +26,7 @@ namespace media
 
 		bool IsFormatSupported(REFGUID subtype)
 		{
-			for (DWORD i = 0; i < g_cFormats; i++)
+			for (DWORD i = 0; i < /*g_cFormats*/2; i++)
 			{
 				if (subtype == g_FormatConversions[i].subtype)
 				{

@@ -49,5 +49,14 @@ namespace MediaStreamer.UI.Properties {
                 return ((int)(this["HWFps"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("640x480@30")]
+        public string CameraFrameFormat {
+            get {
+                return ((string)(this["CameraFrameFormat"]));
+            }
+        }
     }
 }

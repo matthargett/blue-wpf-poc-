@@ -20,7 +20,7 @@ namespace media
 		}
 	}
 
-	HRESULT Pipeline::CreateCamInstance(int index, HWND hVideo, int camIndex, delegate callback, Pipeline **ppPipe)
+	HRESULT Pipeline::CreateCamInstance(int index, HWND hVideo, int camIndex, int prefferableMode, delegate callback, Pipeline **ppPipe)
 	{
 		assert(hVideo != NULL);
 		if (ppPipe == NULL)
@@ -33,7 +33,7 @@ namespace media
 		if (pPipe == NULL)
 			return E_OUTOFMEMORY;
 
-		HRESULT hr = CamStreamDevice::CreateInstance(index, hVideo, hVideo, camIndex, callback, &(pPipe->pCapture));
+		HRESULT hr = CamStreamDevice::CreateInstance(index, hVideo, hVideo, camIndex, prefferableMode, callback, &(pPipe->pCapture));
 
 		if (FAILED(hr))
 		{

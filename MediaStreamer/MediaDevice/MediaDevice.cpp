@@ -24,13 +24,14 @@ void Init(HWND hWnd)
 	hThread = (HANDLE)_beginthreadex(NULL, 0, ThreadProc, NULL, NULL, NULL);
 }
 
-int CreateCamStream(int index, IDirect3DSurface9 **pSurface, int &width, int &height, bool& isHwEnabled, delegate callback)
+int CreateCamStream(int index, int prefferableMode, IDirect3DSurface9 **pSurface, int &width, int &height, bool& isHwEnabled, delegate callback)
 {
 	if (!callback || hWndStreamer == NULL)
 		return 0;
 
 	media::PipelineInit pli = { 0 };
 	pli.index = index;
+	pli.prefferableMode = prefferableMode;
 	pli.renderCallback = callback;
 
 	::SendMessage(hWndStreamer, CAMSTREAM_START, (WPARAM)&pli, NULL);
@@ -75,6 +76,11 @@ void Shutdown(int index)
 {
 	::SendMessage(hWndStreamer, PIPELINE_STOP, index, NULL);
 	return;
+}
+
+int FrameFormatSerialize(int width, int height, int fps)
+{
+	return (width << 16) + (height << 8) + fps;
 }
 
 //---------------------------------------------------------------------------

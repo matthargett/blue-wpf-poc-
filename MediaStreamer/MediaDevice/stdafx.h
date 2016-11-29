@@ -71,10 +71,11 @@ extern "C"
 {
 	LIB_API void Init(HWND hWnd);
 	LIB_API int CreatePipeline(LPCWSTR szAddress, IDirect3DSurface9 **pSurface, int &width, int &heigth, delegate callback);
-	LIB_API int CreateCamStream(int index, IDirect3DSurface9 **pSurface, int &width, int &height, bool& isHwEnabled, delegate callback);
+	LIB_API int CreateCamStream(int index, int prefferableMode,  IDirect3DSurface9 **pSurface, int &width, int &height, bool& isHwEnabled, delegate callback);
 	LIB_API void NextFrame(int index);
 	LIB_API void SetFrameRate(int fps);
 	LIB_API void Shutdown(int index);
+	LIB_API int FrameFormatSerialize(int width, int height, int fps);
 
 }
 

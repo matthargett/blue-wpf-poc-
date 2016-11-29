@@ -90,7 +90,7 @@ namespace media
 	{
 		Pipeline *p = nullptr;
 		int id = ++_impl::streamsCounter;
-		HRESULT hr = Pipeline::CreateCamInstance(id, hWndVideo, pli.index, pli.renderCallback, &p);
+		HRESULT hr = Pipeline::CreateCamInstance(id, hWndVideo, pli.index, pli.prefferableMode, pli.renderCallback, &p);
 
 		if (FAILED(hr))
 		{

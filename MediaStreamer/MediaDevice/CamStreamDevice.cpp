@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "CamStreamDevice.h"
 #include "CamStreamFactory.h"
-#include "FrameFormatControl.h"
 
 namespace media
 {
 
-	CamStreamDevice::CamStreamDevice(int index, HWND hVideo, HWND hEvent, delegate callback)
+	CamStreamDevice::CamStreamDevice(int index, HWND hVideo, HWND hEvent, int prefferableMode, delegate callback)
 		: IStreamDevice(index, hVideo, hEvent, callback),
 		RefCount(1),
+		prefferableMode(prefferableMode),
 		pDevice(NULL),
 		pwszSymbolicLink(NULL),
 		SymbolicLinkCount(0)
@@ -23,7 +23,7 @@ namespace media
 		::DeleteCriticalSection(&csSync);
 	}
 
-	HRESULT CamStreamDevice::CreateInstance(int index, HWND hVideo, HWND hEvent, int camIndex, delegate callback, IStreamDevice **ppReader)
+	HRESULT CamStreamDevice::CreateInstance(int index, HWND hVideo, HWND hEvent, int camIndex, int prefferableMode, delegate callback, IStreamDevice **ppReader)
 	{
 		assert(hVideo != NULL);
 		assert(hEvent != NULL);
@@ -31,7 +31,7 @@ namespace media
 		if (ppReader == NULL)
 			return E_INVALIDARG;
 
-		CamStreamDevice *pDevice = new (std::nothrow) CamStreamDevice(index, hVideo, hEvent, callback);
+		CamStreamDevice *pDevice = new (std::nothrow) CamStreamDevice(index, hVideo, hEvent, prefferableMode, callback);
 
 		if (pDevice == NULL)
 			return E_OUTOFMEMORY;
@@ -273,19 +273,16 @@ namespace media
 
 		if (FAILED(hr))
 		{
-			pDevice = reader::impl_::CreateCamStreamSwDevice(hWndVideo);
+			pDevice = reader::impl_::CreateCamStreamSwDevice(hWndVideo, prefferableMode);
 		}
 		else
 		{
-			pDevice = reader::impl_::CreateCamStreamDevice(&MediaType[0], mediaSize, hWndVideo);
+			pDevice = reader::impl_::CreateCamStreamDevice(&MediaType[0], mediaSize, hWndVideo, prefferableMode);
 		}
 
-		media::reader::FrameFormatControl format(pSource);
-		hr = format.Enumerate();
-		assert(hr == S_OK);
-//		hr = format.Set(8);
-//		assert(hr == S_OK);
-
+		//media::reader::FrameFormatControl format(pSource);
+		//hr = format.Enumerate();
+		//assert(hr == S_OK);
 
 		hr = pDevice->CreateSourceReader(pSource, this);
 

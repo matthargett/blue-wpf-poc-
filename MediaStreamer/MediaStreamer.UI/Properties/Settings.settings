@@ -11,5 +11,8 @@
     <Setting Name="HWFps" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">34</Value>
     </Setting>
+    <Setting Name="CameraFrameFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">640x480@30</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

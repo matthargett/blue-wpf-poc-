@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace MediaStreamer.UI
 {
@@ -23,7 +24,23 @@ namespace MediaStreamer.UI
         public int StartStream(int index, out int width, out int height, out IntPtr surface, out bool isHwEnabled, RenderCallback callback)
         {
             width = 0; height = 0; surface = IntPtr.Zero; isHwEnabled = true;
-            return _mediaDeviceWrapper.CreateCamStream(index, out surface, ref width, ref height, ref isHwEnabled, callback);
+
+            //read preffered frame size from settings
+            int w = 0; int h = 0; int f = 0;
+            var pm = Properties.Settings.Default.CameraFrameFormat;
+            var rg = new Regex(@"\d+");
+            var m = rg.Matches(pm);
+
+            if (m.Count == 3)
+            {
+                Int32.TryParse(m[0].ToString(), out w);
+                Int32.TryParse(m[1].ToString(), out h);
+                Int32.TryParse(m[2].ToString(), out f);
+            }
+
+            int prefferableMode = _mediaDeviceWrapper.FrameFormatSerialize(w, h, f);
+
+            return _mediaDeviceWrapper.CreateCamStream(index, prefferableMode, out surface, ref width, ref height, ref isHwEnabled, callback);
         }
 
         public void StopStream(int index)

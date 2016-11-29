@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CamStreamSwImpl.h"
 #include "ImageTransformers.h"
+#include "FrameFormatControl.h"
 
 namespace media
 {
@@ -8,8 +9,9 @@ namespace media
 	{
 		namespace impl_
 		{
-			CamStreamSwImpl::CamStreamSwImpl(HWND hWndVideo)
-				: hVideo(hWndVideo),
+			CamStreamSwImpl::CamStreamSwImpl(HWND hWndVideo, int prefferableMode)
+				: ICamStreamImpl(prefferableMode),
+				hVideo(hWndVideo),
 				pReader(NULL)
 			{
 			}
@@ -89,7 +91,7 @@ namespace media
 				// Try to find a suitable output type.
 				if (SUCCEEDED(hr))
 				{
-					for (DWORD i = 8; ; i++)
+					for (DWORD i = 0; ; i++)
 					{
 						hr = pReader->GetNativeMediaType(
 							(DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
@@ -98,8 +100,23 @@ namespace media
 
 						if (FAILED(hr)) { break; }
 
+						//check if we have prefferable mode
+						auto preffer = GetPrefferableMode();
+						if (preffer != 0)
+						{
+							auto frameFormat = media::reader::FrameFormatControl::GetFormat(pType);
+							auto s = frameFormat.Serialize();
 
-						hr = TryMediaType(pType);
+							if (preffer == s)
+								hr = TryMediaType(pType);
+							else
+								hr = E_INVALIDARG;
+						}
+						else
+						{
+							hr = TryMediaType(pType);
+						}
+
 						SafeRelease(&pType);
 
 						if (SUCCEEDED(hr))

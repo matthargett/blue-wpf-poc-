@@ -7,7 +7,7 @@ namespace media
 	class CamStreamDevice : public IStreamDevice
 	{
 	public:
-		static HRESULT CreateInstance(int index, HWND hVideo, HWND hEvent, int camIndex, delegate callback, IStreamDevice **ppReader);
+		static HRESULT CreateInstance(int index, HWND hVideo, HWND hEvent, int camIndex, int prefferableMode, delegate callback, IStreamDevice **ppReader);
 
 		// IStreamDevice methods
 		virtual HRESULT Close();
@@ -37,7 +37,7 @@ namespace media
 		STDMETHODIMP_(ULONG) Release();
 	
 	protected:
-		CamStreamDevice(int index, HWND hVideo, HWND hEvent, delegate callback);
+		CamStreamDevice(int index, HWND hVideo, HWND hEvent, int prefferabelMode, delegate callback);
 		virtual ~CamStreamDevice();
 		reader::impl_::ICamStreamImpl *pDevice;
 
@@ -53,6 +53,8 @@ namespace media
 
 		WCHAR *pwszSymbolicLink;
 		UINT32 SymbolicLinkCount;
+
+		int prefferableMode; // FrameSize that should be seleected in webcam (height x width @ fps)
 	};
 }
 

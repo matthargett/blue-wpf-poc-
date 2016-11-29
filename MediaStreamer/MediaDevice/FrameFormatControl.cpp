@@ -7,6 +7,43 @@ namespace media
 {
 	namespace reader
 	{
+		FrameFormat FrameFormatControl::GetFormat(IMFMediaType* pType)
+		{
+			HRESULT hr = S_OK;
+			IMFAttributes *pAttr = NULL;
+			UINT32 highFrameRate = 0, lowFrameRate = 0;
+			UINT32 height = 0, width = 0;
+
+			pType->AddRef();
+			hr = pType->QueryInterface(__uuidof(IMFAttributes), reinterpret_cast<void**>(&pAttr));
+			assert(hr == S_OK);
+			if (FAILED(hr)) goto done;
+
+			UINT64 var;
+			hr = pAttr->GetUINT64(MF_MT_FRAME_RATE, &var);
+			assert(hr == S_OK);
+			if (FAILED(hr)) goto done;
+
+			Unpack2UINT32AsUINT64(var, &highFrameRate, &lowFrameRate);
+
+			hr = pAttr->GetUINT64(MF_MT_FRAME_SIZE, &var);
+			assert(hr == S_OK);
+			if (FAILED(hr)) goto done;
+			
+			Unpack2UINT32AsUINT64(var, &height, &width);
+
+
+		done:
+			if (FAILED(hr))
+			{
+				height = 0; width = 0; highFrameRate = 0;
+			}
+			
+			FrameFormat c(height, width, highFrameRate);
+			
+			SafeRelease(&pAttr);
+			return c;
+		}
 
 		FrameFormatControl::FrameFormatControl(IMFMediaSource  * pSource)
 			: pSourceReader(pSource)

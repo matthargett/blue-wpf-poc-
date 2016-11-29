@@ -11,7 +11,8 @@ namespace media
 		{
 
 			CamStreamStaticImpl::CamStreamStaticImpl(HWND hWndVideo)
-				: hVideo(hWndVideo),
+				: ICamStreamImpl(0),
+				hVideo(hWndVideo),
 				pRender(NULL), pReaderCallback(NULL)
 			{
 				width = 320;

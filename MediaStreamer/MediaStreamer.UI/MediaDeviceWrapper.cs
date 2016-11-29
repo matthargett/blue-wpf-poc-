@@ -23,9 +23,9 @@ namespace MediaStreamer.UI
             return NativeMethods.CreatePipeline(address, out pSurface, ref width, ref height, cb);
         }
 
-        public int CreateCamStream(int id, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, RenderCallback cb)
+        public int CreateCamStream(int id, int prefferableMode, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, RenderCallback cb)
         {
-            return NativeMethods.CreateCamStream(id, out pSurface, ref width, ref height, ref isHwEnabled, cb);
+            return NativeMethods.CreateCamStream(id, prefferableMode, out pSurface, ref width, ref height, ref isHwEnabled, cb);
         }
 
         public void NextFrame(int index)
@@ -42,6 +42,11 @@ namespace MediaStreamer.UI
         {
             NativeMethods.Shutdown(index);
         }
+
+        public int FrameFormatSerialize(int width, int height, int fps)
+        {
+            return NativeMethods.FrameFormatSerialize(width, height, fps);
+        }
     }
 
     internal static class NativeMethods
@@ -55,7 +60,7 @@ namespace MediaStreamer.UI
         internal static extern int CreatePipeline([MarshalAs(UnmanagedType.LPWStr)]string address, out IntPtr pSurface, ref int width, ref int height, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
 
         [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CreateCamStream(int id, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
+        internal static extern int CreateCamStream(int id, int prefferableMode, out IntPtr pSurface, ref int width, ref int height, ref bool isHwEnabled, [MarshalAs(UnmanagedType.FunctionPtr)]RenderCallback cb);
 
         [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void NextFrame(int index);
@@ -65,5 +70,8 @@ namespace MediaStreamer.UI
 
         [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void Shutdown(int index);
+
+        [DllImport(DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int FrameFormatSerialize(int width, int height, int fps);
     }
 }

@@ -11,7 +11,7 @@ namespace media
 			class CamStreamSwImpl : public ICamStreamImpl
 			{
 			public:
-				CamStreamSwImpl(HWND hVideo);
+				CamStreamSwImpl(HWND hVideo, int prefferableMode);
 				~CamStreamSwImpl();
 
 				virtual HRESULT CreateSourceReader(IMFMediaSource *pSource, IMFSourceReaderCallback *pReaderCallback);
